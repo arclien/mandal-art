@@ -11,7 +11,6 @@ const Dashboard = () => {
 
   return (
     <Container>
-      test
       {lists.map((list) => (
         <div>{JSON.stringify(list)}</div>
       ))}
