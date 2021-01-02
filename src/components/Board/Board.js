@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import { insertItemOnArray, getUUID } from 'utils/utils';
 import { TrelloContext } from 'context/TrelloContext';
 
-import { Container, GridContainer, GridItem } from './Board.styles';
+import { GridContainer, GridItem } from './Board.styles';
 
 const CENTER_INDEX = 4;
 const BOARD_LENGTH = 9;
@@ -35,13 +35,11 @@ const Board = ({ isMainBoard, listId, boardName }) => {
     : generateBoard(getCardsByListId(cards, listId), listId, boardName);
 
   return (
-    <Container>
-      <GridContainer>
-        {cell.map(({ id, name }) => (
-          <GridItem key={id}>{name}</GridItem>
-        ))}
-      </GridContainer>
-    </Container>
+    <GridContainer>
+      {cell.map(({ id, name }) => (
+        <GridItem key={id}>{name}</GridItem>
+      ))}
+    </GridContainer>
   );
 };
 

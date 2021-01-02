@@ -20,11 +20,11 @@ export const getMyBoards = () => {
 ################ Get from board
 * */
 
-export const getBoard = (boardId, field = 'all') => {
+export const getBoard = (boardId) => {
   return getTrello(`boards/${boardId}`);
 };
 
-export const getListsOnBoard = (boardId, field = 'all') => {
+export const getListsOnBoard = (boardId, field = 'open') => {
   return getTrello(`boards/${boardId}/lists/${field}`);
 };
 
@@ -35,7 +35,7 @@ export const getLabelsOnBoard = (boardId) => {
   return getTrello(`boards/${boardId}/labels`, params);
 };
 
-export const getCardsOnBoard = (boardId, field = 'all') => {
+export const getCardsOnBoard = (boardId, field = 'visible') => {
   return getTrello(`boards/${boardId}/cards/${field}`);
 };
 

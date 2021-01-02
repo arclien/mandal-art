@@ -1,18 +1,11 @@
 import styled from 'styled-components';
 import { flexContainer, gray80, gray200, yellow100 } from 'remember-ui';
 
-export const Container = styled.div`
+export const GridContainer = styled.div`
   border: 1px solid ${gray200};
 
   width: 32vw;
   height: 300px;
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-`;
-
-export const GridContainer = styled.div`
-  width: 100%;
   padding: 10px;
   position: relative;
   display: flex;
