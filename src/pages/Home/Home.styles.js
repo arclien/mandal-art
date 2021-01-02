@@ -11,11 +11,22 @@ export const Container = styled.div`
 `;
 
 export const Title = styled.div`
+  ${font({ size: '26px', color: text })};
+`;
+
+export const Text = styled.div`
   ${font({ size: '22px', color: text })};
 `;
 
+export const BoardList = styled.div`
+  ${flexContainer('flex-start', 'center', 'row')};
+
+  flex-wrap: wrap;
+  padding: 20px;
+`;
+
 export const BoardLink = styled(Link)`
-  margin: 20px;
+  margin: 10px;
 `;
 
 BoardLink.Button = styled(NewBaseButton)`

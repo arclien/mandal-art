@@ -5,3 +5,7 @@ export const getRandomInt = (min, max) => {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min)) + min;
 };
+
+export const isEmptyObject = (obj) => {
+  return JSON.stringify(obj) === '{}' || Object.keys(obj).length === 0;
+};

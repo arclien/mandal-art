@@ -14,7 +14,7 @@ const Dashboard = () => {
 
   const {
     state: {
-      trelloObjects: { lists, cards, labels, isAuthorized },
+      trelloObjects: { board, lists, cards, labels, isAuthorized },
     },
     actions: { setBoardId },
   } = useContext(TrelloContext);
@@ -32,7 +32,7 @@ const Dashboard = () => {
   return (
     <Container>
       {isAuthorized && lists.length === 0 && <Spinner />}
-
+      {board?.name}
       {lists.map(({ id, name }) => (
         <div key={id}>
           {id} - {name}
