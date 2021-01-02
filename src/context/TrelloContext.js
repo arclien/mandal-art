@@ -1,6 +1,6 @@
 import React, { useState, createContext, useEffect } from 'react';
 
-import { TRELLO_MANDAL_ART_ID } from 'constants/trello';
+import { errorToast } from 'utils/toast';
 import {
   getLabelsOnBoard,
   getCardsOnBoard,
@@ -11,60 +11,52 @@ import { authTrello } from 'services/trelloApi';
 const Context = createContext();
 
 const { Provider, Consumer: TrelloConsumer } = Context;
-
+const defaultTrelloObjects = {
+  boards: [],
+  lists: [],
+  cards: [],
+  labels: [],
+  isAuthorized: true,
+};
 const TrelloProvider = ({ children }) => {
-  const [lists, setLists] = useState([]);
-  const [cards, setCards] = useState([]);
-  const [labels, setLabels] = useState([]);
-  const [listObjectList, setListObjectList] = useState([]);
-  const [cardObjectList, setCardObjectList] = useState([]);
-  const [labelObjectList, setLabelObjectList] = useState([]);
+  const [boardId, setBoardId] = useState();
+  const [trelloObjects, setTrelloObjects] = useState({
+    ...defaultTrelloObjects,
+  });
 
   useEffect(() => {
     (async () => {
+      if (!boardId) return;
       await authTrello().then(async () => {
-        const listObject = await getListsOnBoard(TRELLO_MANDAL_ART_ID);
-        setListObjectList(listObject);
-        const _lists = listObject.reduce((acc, cur) => {
-          return [...acc, cur.name];
-        }, []);
-        setLists([..._lists]);
+        try {
+          const lists = await getListsOnBoard(boardId);
+          const cards = await getCardsOnBoard(boardId);
+          const labels = await getLabelsOnBoard(boardId);
 
-        const labelObject = await getLabelsOnBoard(TRELLO_MANDAL_ART_ID);
-        setLabelObjectList(labelObject);
-        const _labels = labelObject.reduce((acc, cur) => {
-          return [...acc, cur.name];
-        }, []);
-        setLabels([..._labels]);
-
-        const cardObject = await getCardsOnBoard(TRELLO_MANDAL_ART_ID);
-        setCardObjectList(cardObject);
-        const _cards = cardObject.map((card) => {
-          return {
-            name: card.name,
-            desc: card.desc,
-            due: card.due ? card.due.split('T')[0] : '',
-            labels: card.labels.map((_label) => _label.name).join('/'),
-          };
-        });
-
-        setCards(_cards);
+          setTrelloObjects((prevState) => ({
+            ...prevState,
+            lists,
+            cards,
+            labels,
+          }));
+        } catch (e) {
+          setTrelloObjects({
+            ...defaultTrelloObjects,
+            isAuthorized: false,
+          });
+          errorToast('유효하지 않은 접근입니다.');
+        }
       });
     })();
-  }, []);
+  }, [boardId]);
 
   return (
     <Provider
       value={{
         state: {
-          lists,
-          cards,
-          labels,
-          listObjectList,
-          labelObjectList,
-          cardObjectList,
+          trelloObjects,
         },
-        actions: { setLabels },
+        actions: { setBoardId },
       }}
     >
       {children}

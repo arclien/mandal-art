@@ -5,6 +5,7 @@ import { GlobalTheme } from 'remember-ui';
 import { TrelloProvider } from 'context/TrelloContext';
 import Routes from 'routers/routes';
 import CommonRoute from 'routers/CommonRoute';
+import Home from 'pages/Home/Home';
 import Dashboard from 'pages/Dashboard/Dashboard';
 
 import { AppBody } from './App.styles';
@@ -12,7 +13,7 @@ import { AppBody } from './App.styles';
 const BASE_URL = '/mandal-art';
 
 function App() {
-  const { root } = Routes;
+  const { root, board } = Routes;
 
   return (
     <TrelloProvider>
@@ -20,8 +21,11 @@ function App() {
         <AppBody>
           <GlobalTheme />
           <Switch>
-            <CommonRoute path={root.path}>
+            <CommonRoute path={board.path}>
               <Dashboard />
+            </CommonRoute>
+            <CommonRoute path={root.path}>
+              <Home />
             </CommonRoute>
             <Redirect to={root.path} />
           </Switch>

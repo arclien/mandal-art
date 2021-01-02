@@ -1,4 +1,6 @@
-import React, { useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
+import { useRouteMatch, useHistory } from 'react-router-dom';
+import { Spinner } from 'remember-ui';
 
 import { TrelloContext } from 'context/TrelloContext';
 
@@ -6,15 +8,45 @@ import { Container } from './Dashboard.styles';
 
 const Dashboard = () => {
   const {
-    state: { cards, lists },
+    params: { boardId },
+  } = useRouteMatch();
+  const history = useHistory();
+
+  const {
+    state: {
+      trelloObjects: { lists, cards, labels, isAuthorized },
+    },
+    actions: { setBoardId },
   } = useContext(TrelloContext);
+
+  useEffect(() => {
+    (async () => {
+      setBoardId(boardId);
+    })();
+  }, [boardId, setBoardId]);
+
+  useEffect(() => {
+    if (!isAuthorized) history.replace('/home');
+  }, [isAuthorized, history]);
+
   return (
     <Container>
-      {lists.map((list) => (
-        <div key={list}>{JSON.stringify(list)}</div>
+      {isAuthorized && lists.length === 0 && <Spinner />}
+
+      {lists.map(({ id, name }) => (
+        <div key={id}>
+          {id} - {name}
+        </div>
       ))}
-      {cards.map((card) => (
-        <div key={card.name}>{JSON.stringify(card)}</div>
+
+      <br />
+      <br />
+      <br />
+
+      {cards.map(({ id, desc, idList, idLabels, name }) => (
+        <div key={id}>
+          {idList} - {name} - {desc}
+        </div>
       ))}
     </Container>
   );

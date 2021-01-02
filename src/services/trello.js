@@ -6,11 +6,7 @@ import {
   postTrello,
   putTrello,
 } from 'services/trelloApi';
-import {
-  TRELLO_COLLECTION_TYPE,
-  TRELLO_LABEL_COLOR,
-  // TRELLO_MANDAL_ART_ID,
-} from 'constants/trello';
+import { TRELLO_COLLECTION_TYPE, TRELLO_LABEL_COLOR } from 'constants/trello';
 
 export const getMe = () => {
   return getTrello('members/me');
