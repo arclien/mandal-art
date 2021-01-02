@@ -1,5 +1,13 @@
 import styled from 'styled-components';
-import { flexContainer, gray80, gray200, yellow100 } from 'remember-ui';
+import {
+  flexContainer,
+  gray80,
+  gray200,
+  yellow100,
+  blue30,
+  green50,
+  red50,
+} from 'remember-ui';
 
 export const GridContainer = styled.div`
   border: 1px solid ${gray200};
@@ -11,10 +19,17 @@ export const GridContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
+  justify-content: center;
 `;
 
 export const GridItem = styled.div`
   ${flexContainer('center', 'center', 'column')};
+
+  background-color: ${({ isMainBoard, isCenter }) =>
+    (isMainBoard && isCenter && red50) ||
+    (isMainBoard && !isCenter && green50) ||
+    (!isMainBoard && isCenter && green50) ||
+    (!isMainBoard && !isCenter && blue30)};
 
   position: relative;
   width: 32%;

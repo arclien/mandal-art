@@ -20,6 +20,7 @@ const generateBoard = (list, listId, name) => {
   return insertItemOnArray([...list, ...dummyList], CENTER_INDEX, {
     id: listId,
     name,
+    isCenter: true,
   });
 };
 
@@ -36,8 +37,10 @@ const Board = ({ isMainBoard, listId, boardName }) => {
 
   return (
     <GridContainer>
-      {cell.map(({ id, name }) => (
-        <GridItem key={id}>{name}</GridItem>
+      {cell.map(({ id, name, isCenter }) => (
+        <GridItem key={id} isCenter={isCenter} isMainBoard={isMainBoard}>
+          {name}
+        </GridItem>
       ))}
     </GridContainer>
   );
