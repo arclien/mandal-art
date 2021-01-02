@@ -21,6 +21,7 @@ const defaultTrelloObjects = {
   cards: [],
   labels: [],
   isAuthorized: true,
+  isLoaded: false,
 };
 
 const defaultMyInfoObjects = {
@@ -51,6 +52,7 @@ const TrelloProvider = ({ children }) => {
             lists,
             cards,
             labels,
+            isLoaded: true,
           }));
         } catch (e) {
           setTrelloObjects({

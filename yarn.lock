@@ -10367,10 +10367,10 @@ relateurl@^0.2.7:
   resolved "https://registry.yarnpkg.com/relateurl/-/relateurl-0.2.7.tgz#54dbf377e51440aca90a4cd274600d3ff2d888a9"
   integrity sha1-VNvzd+UUQKypCkzSdGANP/LYiKk=
 
-remember-ui@^1.8.2:
-  version "1.8.2"
-  resolved "https://registry.yarnpkg.com/remember-ui/-/remember-ui-1.8.2.tgz#0b243adc07640275f2696ed5b2f589f30159a6c2"
-  integrity sha512-7S70LkCcA3ZdEwuhjtsPvU30boDuP4tnxGwlhjmsY+lX1HWe3D6jov4GqFqkgPauRHVNZt8dYBTqm0p2ZDGeUw==
+remember-ui@1.9.0-beta.8:
+  version "1.9.0-beta.8"
+  resolved "https://registry.yarnpkg.com/remember-ui/-/remember-ui-1.9.0-beta.8.tgz#a2f0bb104c60a04e8cd407c498e3c42aa247db0e"
+  integrity sha512-fV+qeP/42jEiEtT2sBH0u5y3NQl9uwWI1UqM9MocPB2AkREV5WgRZA4BMgEqKim/GXdYh01JusJTYOEOFuUNcw==
   dependencies:
     "@tippy.js/react" "^3.1.1"
     body-scroll-lock "^3.1.5"
@@ -12216,7 +12216,7 @@ uuid@^3.3.2, uuid@^3.4.0:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
 
-uuid@^8.3.0:
+uuid@^8.3.0, uuid@^8.3.2:
   version "8.3.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
   integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
