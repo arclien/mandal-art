@@ -9,12 +9,14 @@ import Dashboard from 'pages/Dashboard/Dashboard';
 
 import { AppBody } from './App.styles';
 
+const PREFIX = '/mandal-art';
+
 function App() {
   const { root } = Routes;
 
   return (
     <TrelloProvider>
-      <BrowserRouter>
+      <BrowserRouter basename={PREFIX}>
         <AppBody>
           <GlobalTheme />
           <Switch>

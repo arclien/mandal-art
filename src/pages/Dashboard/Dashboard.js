@@ -8,14 +8,13 @@ const Dashboard = () => {
   const {
     state: { cards, lists },
   } = useContext(TrelloContext);
-
   return (
     <Container>
       {lists.map((list) => (
-        <div>{JSON.stringify(list)}</div>
+        <div key={list}>{JSON.stringify(list)}</div>
       ))}
       {cards.map((card) => (
-        <div>{JSON.stringify(card)}</div>
+        <div key={card.name}>{JSON.stringify(card)}</div>
       ))}
     </Container>
   );

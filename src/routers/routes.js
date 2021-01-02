@@ -1,8 +1,6 @@
-const PREFIX = '/mandal-art';
-
 const root = {
-  path: `${PREFIX}/dashboard`,
-  url: `${PREFIX}/dashboard`,
+  path: `/dashboard`,
+  url: `/dashboard`,
   description: 'Dashboard Page',
 };
 
