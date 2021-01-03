@@ -1,16 +1,77 @@
 import React, { useState, createContext, useEffect } from 'react';
 
 import { errorToast } from 'utils/toast';
-import { isEmptyObject } from 'utils/utils';
 import {
   getLabelsOnBoard,
   getCardsOnBoard,
   getListsOnBoard,
   getBoard,
-  getMyBoards,
-  getMe,
 } from 'services/trello';
 import { authTrello } from 'services/trelloApi';
+import { insertItemOnArray, getUUID } from 'utils/utils';
+
+const CENTER_INDEX = 4;
+const BOARD_LENGTH = 9;
+
+const getDummyList = (currentLength, trelloType) =>
+  Array.from({ length: BOARD_LENGTH - 1 - currentLength }, () => ({
+    id: `${getUUID()}`,
+    name: '',
+    trelloType,
+  }));
+
+const getCardsByListId = (cards, listId) =>
+  cards.filter((card) => card.idList === listId);
+
+const generateBoard = (board, lists, cards) => {
+  // console.log(board, lists, cards);
+  const newLists = insertItemOnArray(
+    [...lists, ...getDummyList(lists.length, 'list')],
+    CENTER_INDEX,
+    {
+      id: board.id,
+      name: board.name,
+      trelloType: 'board',
+      isCenter: true,
+    }
+  );
+
+  return newLists.map((list, index) => {
+    if (index === CENTER_INDEX) {
+      const _lists = lists.map(({ id, name }) => ({
+        id,
+        name,
+        trelloType: 'list',
+      }));
+      return insertItemOnArray(
+        [..._lists, ...getDummyList(lists.length, 'list')],
+        CENTER_INDEX,
+        {
+          id: list.id,
+          name: list.name,
+          trelloType: 'board',
+          isCenter: true,
+        }
+      );
+    }
+    const _cards = getCardsByListId(cards, list.id).map(({ id, name }) => ({
+      id,
+      name,
+      trelloType: 'card',
+    }));
+
+    return insertItemOnArray(
+      [..._cards, ...getDummyList(_cards.length, 'card')],
+      CENTER_INDEX,
+      {
+        id: list.id,
+        name: list.name,
+        trelloType: 'list',
+        isCenter: true,
+      }
+    );
+  });
+};
 
 const Context = createContext();
 
@@ -24,28 +85,26 @@ const defaultTrelloObjects = {
   isLoaded: false,
 };
 
-const defaultMyInfoObjects = {
-  boards: [],
-  me: {},
-};
-
 const TrelloProvider = ({ children }) => {
-  const [myInfo, setMyInfo] = useState({ ...defaultMyInfoObjects });
+  const [trelloBoardId, setTrelloBoardId] = useState();
+  const [boards, setBoards] = useState([[]]);
   const [trelloObjects, setTrelloObjects] = useState({
     ...defaultTrelloObjects,
   });
-  const [boardId, setBoardId] = useState();
 
   useEffect(() => {
     (async () => {
-      if (!boardId) return;
+      if (!trelloBoardId) return;
       await authTrello().then(async () => {
         try {
-          const board = await getBoard(boardId);
-          const lists = await getListsOnBoard(boardId);
-          const cards = await getCardsOnBoard(boardId);
-          const labels = await getLabelsOnBoard(boardId);
+          const board = await getBoard(trelloBoardId);
+          const lists = await getListsOnBoard(trelloBoardId);
+          const cards = await getCardsOnBoard(trelloBoardId);
+          const labels = await getLabelsOnBoard(trelloBoardId);
 
+          const _boards = generateBoard(board, lists, cards, labels);
+          setBoards(_boards);
+          // console.log(_boards);
           setTrelloObjects((prevState) => ({
             ...prevState,
             board,
@@ -63,41 +122,18 @@ const TrelloProvider = ({ children }) => {
         }
       });
     })();
-  }, [boardId]);
-
-  const getMyInfo = async () => {
-    if (!isEmptyObject(myInfo?.me)) return myInfo;
-
-    return authTrello().then(async () => {
-      try {
-        const me = await getMe();
-        const boards = await getMyBoards();
-
-        setMyInfo((prevState) => ({
-          ...prevState,
-          me,
-          boards,
-        }));
-
-        return myInfo;
-      } catch (e) {
-        setMyInfo({
-          ...defaultMyInfoObjects,
-        });
-        errorToast('유효하지 않은 접근입니다.');
-      }
-    });
-  };
+  }, [trelloBoardId]);
 
   return (
     <Provider
       value={{
         state: {
+          boards,
           trelloObjects,
         },
         actions: {
-          setBoardId,
-          getMyInfo,
+          setBoards,
+          setTrelloBoardId,
           setTrelloObjects,
         },
       }}

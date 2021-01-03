@@ -8,7 +8,6 @@ import { getUUID } from 'utils/utils';
 
 import { Container, BoardWrapper } from './Dashboard.styles';
 
-const CENTER_INDEX = 4;
 const Dashboard = () => {
   const {
     params: { boardId },
@@ -19,14 +18,14 @@ const Dashboard = () => {
     state: {
       trelloObjects: { isLoaded, isAuthorized },
     },
-    actions: { setBoardId },
+    actions: { setTrelloBoardId },
   } = useContext(TrelloContext);
 
   useEffect(() => {
     (async () => {
-      setBoardId(boardId);
+      setTrelloBoardId(boardId);
     })();
-  }, [boardId, setBoardId]);
+  }, [boardId, setTrelloBoardId]);
 
   useEffect(() => {
     if (!isAuthorized) history.replace('/home');
@@ -34,31 +33,18 @@ const Dashboard = () => {
 
   return (
     <TrelloConsumer>
-      {({
-        state: {
-          trelloObjects: { board, lists },
-        },
-      }) => (
+      {({ state: { boards } }) => (
         <Container>
           {isAuthorized && !isLoaded && <Spinner />}
           {isAuthorized && isLoaded && (
             <BoardWrapper>
-              {lists.map(({ id, name }, index) => {
-                if (index === CENTER_INDEX) {
-                  return (
-                    <React.Fragment key={getUUID()}>
-                      <Board
-                        isMainBoard
-                        key={getUUID()}
-                        listId="center"
-                        boardName={board?.name}
-                      />
-                      <Board key={id} listId={id} boardName={name} />
-                    </React.Fragment>
-                  );
-                }
-                return <Board key={id} listId={id} boardName={name} />;
-              })}
+              {boards.map((board, index) => (
+                <Board
+                  key={getUUID()}
+                  board={board}
+                  isMainBoard={index === 4}
+                />
+              ))}
             </BoardWrapper>
           )}
         </Container>

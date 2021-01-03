@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 
 import { TRELLO_MANDAL_ART_ID } from 'constants/trello';
-import { TrelloContext } from 'context/TrelloContext';
+import { TrelloMyInfoContext } from 'context/TrelloMyInfoContext';
 
 import {
   Container,
@@ -15,7 +15,8 @@ import {
 const Home = () => {
   const {
     actions: { getMyInfo },
-  } = useContext(TrelloContext);
+  } = useContext(TrelloMyInfoContext);
+
   const [myInfo, setMyInfo] = useState({
     email: '',
     fullName: '',

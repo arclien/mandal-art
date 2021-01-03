@@ -3,6 +3,7 @@ import { BrowserRouter, Redirect, Switch } from 'react-router-dom';
 import { GlobalTheme } from 'remember-ui';
 
 import { TrelloProvider } from 'context/TrelloContext';
+import { TrelloMyInfoProvider } from 'context/TrelloMyInfoContext';
 import Routes from 'routers/routes';
 import CommonRoute from 'routers/CommonRoute';
 import Home from 'pages/Home/Home';
@@ -16,22 +17,24 @@ function App() {
   const { root, board } = Routes;
 
   return (
-    <TrelloProvider>
-      <BrowserRouter basename={BASE_URL}>
-        <AppBody>
-          <GlobalTheme />
-          <Switch>
-            <CommonRoute path={board.path}>
-              <Dashboard />
-            </CommonRoute>
-            <CommonRoute path={root.path}>
-              <Home />
-            </CommonRoute>
-            <Redirect to={root.path} />
-          </Switch>
-        </AppBody>
-      </BrowserRouter>
-    </TrelloProvider>
+    <TrelloMyInfoProvider>
+      <TrelloProvider>
+        <BrowserRouter basename={BASE_URL}>
+          <AppBody>
+            <GlobalTheme />
+            <Switch>
+              <CommonRoute path={board.path}>
+                <Dashboard />
+              </CommonRoute>
+              <CommonRoute path={root.path}>
+                <Home />
+              </CommonRoute>
+              <Redirect to={root.path} />
+            </Switch>
+          </AppBody>
+        </BrowserRouter>
+      </TrelloProvider>
+    </TrelloMyInfoProvider>
   );
 }
 

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { gray200 } from 'remember-ui';
+import {} from 'remember-ui';
 
 export const GridContainer = styled.div`
   display: grid;
