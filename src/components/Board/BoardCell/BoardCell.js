@@ -1,26 +1,48 @@
 import React, { useState, useCallback } from 'react';
 
-import { updateList, createList } from 'services/trello';
+import {
+  updateList,
+  createList,
+  updateCard,
+  createCard,
+} from 'services/trello';
 
 import { Container, Input } from './BoardCell.styles';
 
-const BoardCell = ({ cell, isMainBoard, setBoards, boardIndex, cellIndex }) => {
+const BoardCell = ({ cell, isMainBoard, setBoards }) => {
   const [text, setText] = useState(cell.name);
 
   const onChange = useCallback(async () => {
-    const { id, trelloType, name, isList, idBoard } = cell;
-    setBoards((prevState) => {
-      return prevState.map((els) =>
-        els.map((el) => (el.id === id ? { ...el, name: text } : el))
-      );
-    });
+    const { id, trelloType, name, idList, idBoard } = cell;
+
+    let responseOfNewCell;
     if (trelloType === 'list') {
       if (name) {
         updateList({ ...cell, name: text });
       } else {
-        createList(text, idBoard);
+        responseOfNewCell = await createList(text, idBoard);
+      }
+    } else if (trelloType === 'card') {
+      if (name) {
+        updateCard({ ...cell, name: text });
+      } else {
+        responseOfNewCell = await createCard(text, idList);
       }
     }
+
+    setBoards((prevState) => {
+      return prevState.map((els) =>
+        els.map((el) =>
+          el.id === id
+            ? {
+                ...el,
+                ...(responseOfNewCell && { id: responseOfNewCell?.id }),
+                name: text,
+              }
+            : el
+        )
+      );
+    });
   }, [setBoards, cell, text]);
 
   return (

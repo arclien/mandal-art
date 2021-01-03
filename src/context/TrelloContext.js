@@ -68,7 +68,7 @@ const generateBoard = (board, lists, cards) => {
         ..._cards,
         ...getDummyList(_cards.length, 'card', {
           idBoard: board.id,
-          isList: list.id,
+          idList: list.id,
         }),
       ],
       CENTER_INDEX,
