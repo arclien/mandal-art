@@ -1,23 +1,23 @@
 {
   "files": {
     "main.css": "/mandal-art/static/css/main.0947c78e.chunk.css",
-    "main.js": "/mandal-art/static/js/main.f4695201.chunk.js",
-    "main.js.map": "/mandal-art/static/js/main.f4695201.chunk.js.map",
+    "main.js": "/mandal-art/static/js/main.53043285.chunk.js",
+    "main.js.map": "/mandal-art/static/js/main.53043285.chunk.js.map",
     "runtime-main.js": "/mandal-art/static/js/runtime-main.4e1db1da.js",
     "runtime-main.js.map": "/mandal-art/static/js/runtime-main.4e1db1da.js.map",
     "static/css/2.7ac682ed.chunk.css": "/mandal-art/static/css/2.7ac682ed.chunk.css",
-    "static/js/2.34e3a3f9.chunk.js": "/mandal-art/static/js/2.34e3a3f9.chunk.js",
-    "static/js/2.34e3a3f9.chunk.js.map": "/mandal-art/static/js/2.34e3a3f9.chunk.js.map",
+    "static/js/2.eceb954d.chunk.js": "/mandal-art/static/js/2.eceb954d.chunk.js",
+    "static/js/2.eceb954d.chunk.js.map": "/mandal-art/static/js/2.eceb954d.chunk.js.map",
     "index.html": "/mandal-art/index.html",
     "static/css/2.7ac682ed.chunk.css.map": "/mandal-art/static/css/2.7ac682ed.chunk.css.map",
     "static/css/main.0947c78e.chunk.css.map": "/mandal-art/static/css/main.0947c78e.chunk.css.map",
-    "static/js/2.34e3a3f9.chunk.js.LICENSE.txt": "/mandal-art/static/js/2.34e3a3f9.chunk.js.LICENSE.txt"
+    "static/js/2.eceb954d.chunk.js.LICENSE.txt": "/mandal-art/static/js/2.eceb954d.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.4e1db1da.js",
     "static/css/2.7ac682ed.chunk.css",
-    "static/js/2.34e3a3f9.chunk.js",
+    "static/js/2.eceb954d.chunk.js",
     "static/css/main.0947c78e.chunk.css",
-    "static/js/main.f4695201.chunk.js"
+    "static/js/main.53043285.chunk.js"
   ]
 }
