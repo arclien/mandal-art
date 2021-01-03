@@ -33,7 +33,7 @@ const Dashboard = () => {
 
   return (
     <TrelloConsumer>
-      {({ state: { boards } }) => (
+      {({ state: { boards }, actions: { setBoards } }) => (
         <Container>
           {isAuthorized && !isLoaded && <Spinner />}
           {isAuthorized && isLoaded && (
@@ -43,6 +43,8 @@ const Dashboard = () => {
                   key={getUUID()}
                   board={board}
                   isMainBoard={index === 4}
+                  setBoards={setBoards}
+                  boardIndex={index}
                 />
               ))}
             </BoardWrapper>
