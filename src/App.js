@@ -4,6 +4,7 @@ import { GlobalTheme } from 'remember-ui';
 
 import { TrelloProvider } from 'context/TrelloContext';
 import { TrelloMyInfoProvider } from 'context/TrelloMyInfoContext';
+import GlobalHelmet from 'components/GlobalHelmet/GlobalHelmet';
 import Routes from 'routers/routes';
 import CommonRoute from 'routers/CommonRoute';
 import Home from 'pages/Home/Home';
@@ -19,6 +20,7 @@ function App() {
   return (
     <TrelloMyInfoProvider>
       <TrelloProvider>
+        <GlobalHelmet />
         <BrowserRouter basename={BASE_URL}>
           <AppBody>
             <GlobalTheme />
