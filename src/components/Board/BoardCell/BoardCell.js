@@ -18,7 +18,7 @@ const BoardCell = ({ cell, isMainBoard, setBoards, boardIndex, cellIndex }) => {
       if (name) {
         updateList({ ...cell, name: text });
       } else {
-        console.log('TODO createList');
+        // console.log('TODO createList');
       }
     }
   }, [setBoards, cell, text]);
