@@ -41,26 +41,26 @@ const Dashboard = () => {
       }) => (
         <Container>
           {isAuthorized && !isLoaded && <Spinner />}
-          {board?.name}
-          <BoardWrapper>
-            {lists.map(({ id, name }, index) => {
-              // console.log(lists);
-              if (index === CENTER_INDEX) {
-                return (
-                  <React.Fragment key={getUUID()}>
-                    <Board
-                      isMainBoard
-                      key={getUUID()}
-                      listId="center"
-                      boardName={board?.name}
-                    />
-                    <Board key={id} listId={id} boardName={name} />
-                  </React.Fragment>
-                );
-              }
-              return <Board key={id} listId={id} boardName={name} />;
-            })}
-          </BoardWrapper>
+          {isAuthorized && isLoaded && (
+            <BoardWrapper>
+              {lists.map(({ id, name }, index) => {
+                if (index === CENTER_INDEX) {
+                  return (
+                    <React.Fragment key={getUUID()}>
+                      <Board
+                        isMainBoard
+                        key={getUUID()}
+                        listId="center"
+                        boardName={board?.name}
+                      />
+                      <Board key={id} listId={id} boardName={name} />
+                    </React.Fragment>
+                  );
+                }
+                return <Board key={id} listId={id} boardName={name} />;
+              })}
+            </BoardWrapper>
+          )}
         </Container>
       )}
     </TrelloConsumer>

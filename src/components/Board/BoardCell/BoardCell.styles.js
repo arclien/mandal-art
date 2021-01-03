@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 import {
   flexContainer,
-  gray80,
-  yellow100,
   blue30,
   green50,
   red50,
@@ -20,36 +18,21 @@ export const Container = styled.div`
     (!isMainBoard && isCenter && green50) ||
     (!isMainBoard && !isCenter && blue30)};
 
-  position: relative;
-  width: 32%;
-  min-width: 32%;
-  height: 32%;
-  padding: 10px;
-
-  border: solid 1px ${gray80};
-  margin-bottom: 1%;
-
-  &:nth-child(3n + 2) {
-    margin-left: 1%;
-    margin-right: 1%;
-  }
-
-  &:nth-last-child(-n + 3) {
-    margin-bottom: 0px;
-  }
-
-  &:hover {
-    cursor: pointer;
-    border: solid 1px ${yellow100};
-  }
+  width: 100%;
+  height: 100px;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 7px;
+  word-break: keep-all;
+  text-align: center;
 `;
 
 export const Input = styled(BaseInput)`
   ${font({ size: '11px', color: text })};
 
+  background-color: transparent;
   width: ${({ width }) => width};
   margin-right: 3px;
   > input {
+    background-color: transparent;
     text-align: center;
     padding: 5px;
     height: 40px;

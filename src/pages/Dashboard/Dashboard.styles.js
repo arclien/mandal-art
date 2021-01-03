@@ -8,7 +8,11 @@ export const Container = styled.div`
 `;
 
 export const BoardWrapper = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 2rem;
+  padding: 2rem;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 5px;
+  border-radius: 0.5rem;
 `;
