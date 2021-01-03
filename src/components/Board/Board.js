@@ -5,6 +5,7 @@ import BoardCell from './BoardCell/BoardCell';
 import { GridContainer } from './Board.styles';
 
 const Board = ({ board, isMainBoard, setBoards, boardIndex }) => {
+  // console.log(board);
   return (
     <GridContainer>
       {board.map((cell, index) => (

@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 
-import { updateList } from 'services/trello';
+import { updateList, createList } from 'services/trello';
 
 import { Container, Input } from './BoardCell.styles';
 
@@ -8,7 +8,7 @@ const BoardCell = ({ cell, isMainBoard, setBoards, boardIndex, cellIndex }) => {
   const [text, setText] = useState(cell.name);
 
   const onChange = useCallback(async () => {
-    const { id, trelloType, name } = cell;
+    const { id, trelloType, name, isList, idBoard } = cell;
     setBoards((prevState) => {
       return prevState.map((els) =>
         els.map((el) => (el.id === id ? { ...el, name: text } : el))
@@ -18,7 +18,7 @@ const BoardCell = ({ cell, isMainBoard, setBoards, boardIndex, cellIndex }) => {
       if (name) {
         updateList({ ...cell, name: text });
       } else {
-        // console.log('TODO createList');
+        createList(text, idBoard);
       }
     }
   }, [setBoards, cell, text]);

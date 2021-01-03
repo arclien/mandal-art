@@ -88,6 +88,15 @@ export const updateCard = async (cell) => {
   return putTrello(`${TRELLO_COLLECTION_TYPE.CARDS}/${id}`, card);
 };
 
+export const createList = async (name, idBoard) => {
+  const newList = {
+    idBoard,
+    name,
+    pos: 'bottom',
+  };
+  return postTrello('lists', newList);
+};
+
 export const updateList = async (list) => {
   if (!list) return;
   const { id } = list;

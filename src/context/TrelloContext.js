@@ -13,8 +13,9 @@ import { insertItemOnArray, getUUID } from 'utils/utils';
 const CENTER_INDEX = 4;
 const BOARD_LENGTH = 9;
 
-const getDummyList = (currentLength, trelloType) =>
+const getDummyList = (currentLength, trelloType, defaultProps = {}) =>
   Array.from({ length: BOARD_LENGTH - 1 - currentLength }, () => ({
+    ...defaultProps,
     id: `${getUUID()}`,
     name: '',
     trelloType,
@@ -25,8 +26,10 @@ const getCardsByListId = (cards, listId) =>
 
 const generateBoard = (board, lists, cards) => {
   // console.log(board, lists, cards);
+
+  // 리스트 없는 경우 생성
   const newLists = insertItemOnArray(
-    [...lists, ...getDummyList(lists.length, 'list')],
+    [...lists, ...getDummyList(lists.length, 'list', { idBoard: board.id })],
     CENTER_INDEX,
     {
       id: board.id,
@@ -37,35 +40,42 @@ const generateBoard = (board, lists, cards) => {
   );
 
   return newLists.map((list, index) => {
+    // 가운데 보드(리스트) 생성(셀)
     if (index === CENTER_INDEX) {
-      const _lists = lists.map(({ id, name }) => ({
+      return newLists.map(({ id, name, idBoard }, i) => ({
         id,
         name,
-        trelloType: 'list',
+        idBoard,
+        trelloType: i === CENTER_INDEX ? 'board' : 'list',
+        isCenter: i === CENTER_INDEX,
       }));
-      return insertItemOnArray(
-        [..._lists, ...getDummyList(lists.length, 'list')],
-        CENTER_INDEX,
-        {
-          id: list.id,
-          name: list.name,
-          trelloType: 'board',
-          isCenter: true,
-        }
-      );
     }
-    const _cards = getCardsByListId(cards, list.id).map(({ id, name }) => ({
-      id,
-      name,
-      trelloType: 'card',
-    }));
 
+    // 각 리스트(보드)에 종속된 카드 (셀) 필터
+    const _cards = getCardsByListId(cards, list.id).map(
+      ({ id, name, idBoard, idList }) => ({
+        id,
+        name,
+        idBoard,
+        idList,
+        trelloType: 'card',
+      })
+    );
+
+    // 긱 리스트(보드)에 종속된 카드 (셀) 더미 생성
     return insertItemOnArray(
-      [..._cards, ...getDummyList(_cards.length, 'card')],
+      [
+        ..._cards,
+        ...getDummyList(_cards.length, 'card', {
+          idBoard: board.id,
+          isList: list.id,
+        }),
+      ],
       CENTER_INDEX,
       {
         id: list.id,
         name: list.name,
+        idBoard: list.idBoard,
         trelloType: 'list',
         isCenter: true,
       }
