@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
 
 import { insertItemOnArray, getUUID } from 'utils/utils';
-import { TrelloContext } from 'context/TrelloContext';
+import { TrelloContext, TrelloConsumer } from 'context/TrelloContext';
+import BoardCell from './BoardCell/BoardCell';
 
-import { GridContainer, GridItem } from './Board.styles';
+import { GridContainer } from './Board.styles';
 
 const CENTER_INDEX = 4;
 const BOARD_LENGTH = 9;
@@ -25,24 +26,25 @@ const generateBoard = (list, listId, name) => {
 };
 
 const Board = ({ isMainBoard, listId, boardName }) => {
-  const {
-    state: {
-      trelloObjects: { lists, cards },
-    },
-  } = useContext(TrelloContext);
-
-  const cell = isMainBoard
-    ? generateBoard(lists, listId, boardName)
-    : generateBoard(getCardsByListId(cards, listId), listId, boardName);
-
   return (
-    <GridContainer>
-      {cell.map(({ id, name, isCenter }) => (
-        <GridItem key={id} isCenter={isCenter} isMainBoard={isMainBoard}>
-          {name}
-        </GridItem>
-      ))}
-    </GridContainer>
+    <TrelloConsumer>
+      {({
+        state: {
+          trelloObjects: { lists, cards },
+        },
+      }) => {
+        const cells = isMainBoard
+          ? generateBoard(lists, listId, boardName)
+          : generateBoard(getCardsByListId(cards, listId), listId, boardName);
+        return (
+          <GridContainer>
+            {cells.map((cell) => (
+              <BoardCell key={cell.id} cell={cell} isMainBoard={isMainBoard} />
+            ))}
+          </GridContainer>
+        );
+      }}
+    </TrelloConsumer>
   );
 };
 

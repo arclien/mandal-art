@@ -95,7 +95,11 @@ const TrelloProvider = ({ children }) => {
         state: {
           trelloObjects,
         },
-        actions: { setBoardId, getMyInfo },
+        actions: {
+          setBoardId,
+          getMyInfo,
+          setTrelloObjects,
+        },
       }}
     >
       {children}

@@ -21,4 +21,8 @@ export const insertItemOnArray = (arr, index, newItem) => [
   ...arr.slice(index),
 ];
 
+export const replaceObejctOnArray = (arr, item) => {
+  return arr.map((x) => (item.id === x.id ? item : x));
+};
+
 export const getUUID = () => uuidv4();

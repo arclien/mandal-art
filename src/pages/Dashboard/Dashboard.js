@@ -2,7 +2,7 @@ import React, { useEffect, useContext } from 'react';
 import { useRouteMatch, useHistory } from 'react-router-dom';
 import { Spinner } from 'remember-ui';
 
-import { TrelloContext } from 'context/TrelloContext';
+import { TrelloContext, TrelloConsumer } from 'context/TrelloContext';
 import Board from 'components/Board/Board';
 import { getUUID } from 'utils/utils';
 
@@ -17,7 +17,7 @@ const Dashboard = () => {
 
   const {
     state: {
-      trelloObjects: { isLoaded, isAuthorized, board, lists },
+      trelloObjects: { isLoaded, isAuthorized },
     },
     actions: { setBoardId },
   } = useContext(TrelloContext);
@@ -33,28 +33,37 @@ const Dashboard = () => {
   }, [isAuthorized, history]);
 
   return (
-    <Container>
-      {isAuthorized && !isLoaded && <Spinner />}
-      {board?.name}
-      <BoardWrapper>
-        {lists.map(({ id, name }, index) => {
-          if (index === CENTER_INDEX) {
-            return (
-              <React.Fragment key={getUUID()}>
-                <Board
-                  isMainBoard
-                  key={getUUID()}
-                  listId="center"
-                  boardName={board?.name}
-                />
-                <Board key={id} listId={id} boardName={name} />
-              </React.Fragment>
-            );
-          }
-          return <Board key={id} listId={id} boardName={name} />;
-        })}
-      </BoardWrapper>
-    </Container>
+    <TrelloConsumer>
+      {({
+        state: {
+          trelloObjects: { board, lists },
+        },
+      }) => (
+        <Container>
+          {isAuthorized && !isLoaded && <Spinner />}
+          {board?.name}
+          <BoardWrapper>
+            {lists.map(({ id, name }, index) => {
+              // console.log(lists);
+              if (index === CENTER_INDEX) {
+                return (
+                  <React.Fragment key={getUUID()}>
+                    <Board
+                      isMainBoard
+                      key={getUUID()}
+                      listId="center"
+                      boardName={board?.name}
+                    />
+                    <Board key={id} listId={id} boardName={name} />
+                  </React.Fragment>
+                );
+              }
+              return <Board key={id} listId={id} boardName={name} />;
+            })}
+          </BoardWrapper>
+        </Container>
+      )}
+    </TrelloConsumer>
   );
 };
 

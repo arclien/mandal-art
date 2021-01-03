@@ -88,6 +88,13 @@ export const updateCard = async (cell) => {
   return putTrello(`${TRELLO_COLLECTION_TYPE.CARDS}/${id}`, card);
 };
 
+export const updateList = async (list) => {
+  if (!list) return;
+  const { id } = list;
+
+  return putTrello(`${TRELLO_COLLECTION_TYPE.LISTS}/${id}`, { ...list });
+};
+
 /** 
 ################ delete collections by id
 * */
