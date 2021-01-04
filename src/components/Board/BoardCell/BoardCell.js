@@ -15,7 +15,7 @@ import {
 import { TRELLO_COLLECTION_TYPE } from 'constants/trello';
 import { getUUID } from 'utils/utils';
 
-import { Container, Input, Hover, HoverContainer } from './BoardCell.styles';
+import { Container, TextArea, Hover, HoverContainer } from './BoardCell.styles';
 
 const validateBeforeSave = (cell, board, text) => {
   const { trelloType } = cell;
@@ -83,6 +83,13 @@ const BoardCell = ({ cell, setBoards, board, boardIndex, cellIndex }) => {
     });
   }, [setBoards, board, cell, text]);
 
+  const onEnterPress = (e) => {
+    if (e.keyCode === 13 && e.shiftKey === false) {
+      e.preventDefault();
+      onEnter();
+    }
+  };
+
   const deleteOkCallback = useCallback(() => {
     const { id, trelloType } = cell;
 
@@ -120,13 +127,10 @@ const BoardCell = ({ cell, setBoards, board, boardIndex, cellIndex }) => {
       isCenter={cell.isCenter}
       isMainBoard={boardIndex === BOARD_CENTER_INDEX}
     >
-      <Input
-        width="100%"
-        type="text"
+      <TextArea
         name={cell.id}
-        maxLength={20}
         value={text}
-        onEnter={onEnter}
+        onKeyDown={onEnterPress}
         disabled={cellIndex === BOARD_CENTER_INDEX}
         onChange={(e) => {
           setText(e.target.value);

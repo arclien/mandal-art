@@ -4,9 +4,9 @@ import {
   blue30,
   green50,
   red50,
-  BaseInput,
   font,
   text,
+  Textarea,
 } from 'remember-ui';
 
 import plusIcon from 'assets/images/ico-plus.png';
@@ -29,21 +29,24 @@ export const Container = styled.div`
   text-align: center;
 `;
 
-export const Input = styled(BaseInput)`
-  ${font({ size: '11px', color: text })};
+export const TextArea = styled.textarea.attrs({
+  type: 'text',
+  maxLength: 30,
+})`
+  ${font({ size: '14px', color: text })};
 
   background-color: transparent;
-  width: ${({ width }) => width};
+  width: 100%;
+  height: 60%;
+  border: 0px;
+  padding: 5px 10px;
+  text-align: center;
+  outline: none;
+  resize: none;
+  -webkit-appearance: none;
 
-  > input {
-    background-color: transparent;
-    text-align: center;
-    padding: 5px;
-    height: 40px;
+  &:focus {
     border: 0px;
-    &:focus {
-      border: 0px;
-    }
   }
 `;
 

@@ -24,7 +24,10 @@ div {
   outline: none;
 }
 
+textarea,
 textarea:focus,
 input:focus {
+  box-sizing: border-box;
   outline: none;
+  font-family: sans-serif;
 }
