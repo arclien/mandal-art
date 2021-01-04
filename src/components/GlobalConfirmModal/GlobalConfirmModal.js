@@ -9,7 +9,7 @@ const GlobalConfirmModal = () => {
     actions: { closeConfirmModal },
   } = useContext(ConfirmModalContext);
 
-  const { callbackOk, callbackNo, type, icon, title, message } = modalContents;
+  const { callbackOk, type, icon, title, message } = modalContents;
 
   const onOk = () => {
     callbackOk();
