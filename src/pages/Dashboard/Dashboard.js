@@ -5,6 +5,7 @@ import { Spinner } from 'remember-ui';
 import { TrelloContext, TrelloConsumer } from 'context/TrelloContext';
 import Board from 'components/Board/Board';
 import { getUUID } from 'utils/utils';
+import { BOARD_LENGTH } from 'constants/board';
 
 import { Container, BoardWrapper } from './Dashboard.styles';
 
@@ -38,7 +39,7 @@ const Dashboard = () => {
           {isAuthorized && !isLoaded && <Spinner />}
           {isAuthorized && isLoaded && (
             <BoardWrapper>
-              {boards.map((board, index) => (
+              {boards.slice(0, BOARD_LENGTH).map((board, index) => (
                 <Board
                   key={getUUID()}
                   board={board}
