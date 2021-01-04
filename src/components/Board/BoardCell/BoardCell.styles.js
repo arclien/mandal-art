@@ -22,7 +22,7 @@ export const Container = styled.div`
     (!isMainBoard && !isCenter && blue30)};
 
   width: 100%;
-  height: 100px;
+  height: calc((100vh - 168px) / 9);
   position: relative;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 7px;
   word-break: keep-all;
@@ -73,7 +73,9 @@ HoverContainer.Plus = styled.img.attrs({
   height: 20,
   alt: 'zoom',
   src: plusIcon,
-})``;
+})`
+  cursor: pointer;
+`;
 
 HoverContainer.Close = styled.img.attrs({
   width: 20,
@@ -86,6 +88,7 @@ HoverContainer.Close = styled.img.attrs({
   }
   display: none;
 
+  cursor: pointer;
   position: absolute;
   top: -10px;
   right: -10px;
