@@ -19,3 +19,12 @@ a {
 div {
   box-sizing: border-box;
 }
+
+*:focus {
+  outline: none;
+}
+
+textarea:focus,
+input:focus {
+  outline: none;
+}
