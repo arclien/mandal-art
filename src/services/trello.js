@@ -107,3 +107,17 @@ export const updateList = async (list) => {
 export const deleteCardById = (cardId) => {
   return deleteTrello(`${TRELLO_COLLECTION_TYPE.CARDS}/${cardId}`);
 };
+
+/** 리스트 상태에 따라(closed == archive) archive/unarchive 토글  */
+export const archiveListById = (listId, isArchived) => {
+  return putTrello(`${TRELLO_COLLECTION_TYPE.LISTS}/${listId}`, {
+    closed: !isArchived,
+  });
+};
+
+/** 리스트에 속한 모든 카드를 archive */
+export const archiveAllCardsByListId = (listId) => {
+  return postTrello(
+    `${TRELLO_COLLECTION_TYPE.LISTS}/${listId}/archiveAllCards`
+  );
+};
