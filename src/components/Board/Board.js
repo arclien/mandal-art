@@ -4,7 +4,7 @@ import BoardCell from './BoardCell/BoardCell';
 
 import { GridContainer } from './Board.styles';
 
-const Board = ({ board, isMainBoard, setBoards, boardIndex }) => {
+const Board = ({ board, setBoards, boardIndex }) => {
   // console.log(board);
   return (
     <GridContainer>
@@ -12,8 +12,8 @@ const Board = ({ board, isMainBoard, setBoards, boardIndex }) => {
         <BoardCell
           key={cell.id}
           cell={cell}
-          isMainBoard={isMainBoard}
           setBoards={setBoards}
+          board={board}
           boardIndex={boardIndex}
           cellIndex={index}
         />

@@ -1,5 +1,6 @@
 import React, { useState, createContext, useEffect } from 'react';
 
+import { TRELLO_COLLECTION_TYPE } from 'constants/trello';
 import { errorToast } from 'utils/toast';
 import {
   getLabelsOnBoard,
@@ -9,9 +10,7 @@ import {
 } from 'services/trello';
 import { authTrello } from 'services/trelloApi';
 import { insertItemOnArray, getUUID } from 'utils/utils';
-
-const CENTER_INDEX = 4;
-const BOARD_LENGTH = 9;
+import { BOARD_CENTER_INDEX, BOARD_LENGTH } from 'constants/board';
 
 const getDummyList = (currentLength, trelloType, defaultProps = {}) =>
   Array.from({ length: BOARD_LENGTH - 1 - currentLength }, () => ({
@@ -29,25 +28,33 @@ const generateBoard = (board, lists, cards) => {
 
   // 리스트 없는 경우 생성
   const newLists = insertItemOnArray(
-    [...lists, ...getDummyList(lists.length, 'list', { idBoard: board.id })],
-    CENTER_INDEX,
+    [
+      ...lists,
+      ...getDummyList(lists.length, TRELLO_COLLECTION_TYPE.LISTS, {
+        idBoard: board.id,
+      }),
+    ],
+    BOARD_CENTER_INDEX,
     {
       id: board.id,
       name: board.name,
-      trelloType: 'board',
+      trelloType: TRELLO_COLLECTION_TYPE.BOARDS,
       isCenter: true,
     }
   );
 
   return newLists.map((list, index) => {
     // 가운데 보드(리스트) 생성(셀)
-    if (index === CENTER_INDEX) {
+    if (index === BOARD_CENTER_INDEX) {
       return newLists.map(({ id, name, idBoard }, i) => ({
         id,
         name,
         idBoard,
-        trelloType: i === CENTER_INDEX ? 'board' : 'list',
-        isCenter: i === CENTER_INDEX,
+        trelloType:
+          i === BOARD_CENTER_INDEX
+            ? TRELLO_COLLECTION_TYPE.BOARDS
+            : TRELLO_COLLECTION_TYPE.LISTS,
+        isCenter: i === BOARD_CENTER_INDEX,
       }));
     }
 
@@ -58,7 +65,7 @@ const generateBoard = (board, lists, cards) => {
         name,
         idBoard,
         idList,
-        trelloType: 'card',
+        trelloType: TRELLO_COLLECTION_TYPE.CARDS,
       })
     );
 
@@ -66,17 +73,17 @@ const generateBoard = (board, lists, cards) => {
     return insertItemOnArray(
       [
         ..._cards,
-        ...getDummyList(_cards.length, 'card', {
+        ...getDummyList(_cards.length, TRELLO_COLLECTION_TYPE.CARDS, {
           idBoard: board.id,
           idList: list.id,
         }),
       ],
-      CENTER_INDEX,
+      BOARD_CENTER_INDEX,
       {
         id: list.id,
         name: list.name,
         idBoard: list.idBoard,
-        trelloType: 'list',
+        trelloType: TRELLO_COLLECTION_TYPE.LISTS,
         isCenter: true,
       }
     );

@@ -42,7 +42,6 @@ const Dashboard = () => {
                 <Board
                   key={getUUID()}
                   board={board}
-                  isMainBoard={index === 4}
                   setBoards={setBoards}
                   boardIndex={index}
                 />
