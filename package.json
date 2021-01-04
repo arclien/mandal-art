@@ -53,6 +53,7 @@
   "devDependencies": {
     "eslint-config-airbnb": "^18.1.0",
     "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.22.1",
     "prettier": "^2.0.5"
   },
   "homepage": "https://arclien.github.io/mandal-art"
