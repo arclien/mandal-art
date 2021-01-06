@@ -21,6 +21,15 @@ export const insertItemOnArray = (arr, index, newItem) => [
   ...arr.slice(index),
 ];
 
+export const replaceArrayOnArray = (arr, index, newArray) => [
+  // part of the array before the specified index
+  ...arr.slice(0, index),
+  // inserted item
+  newArray,
+  // part of the array after the specified index
+  ...arr.slice(index + 1),
+];
+
 export const replaceObejctOnArray = (arr, item) => {
   return arr.map((x) => (item.id === x.id ? item : x));
 };

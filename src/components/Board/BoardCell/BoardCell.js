@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext } from 'react';
+import React, { useEffect, useState, useCallback, useContext } from 'react';
 
 import { ConfirmModalContext } from 'context/ConfirmModalContext';
 import { TrelloContext } from 'context/TrelloContext';
@@ -33,7 +33,8 @@ const validateBeforeSave = (cell, board, text) => {
   return true;
 };
 
-const BoardCell = ({ cell, setBoards, board, boardIndex, cellIndex }) => {
+const BoardCell = ({ cell, setBoards, boardIndex, cellIndex }) => {
+  // console.log(cell.name);
   const {
     actions: { openDeleteConfirmModal },
   } = useContext(ConfirmModalContext);
@@ -44,6 +45,9 @@ const BoardCell = ({ cell, setBoards, board, boardIndex, cellIndex }) => {
 
   const [text, setText] = useState(cell.name);
 
+  useEffect(() => {
+    setText(cell.name);
+  }, [cell]);
   const onEnter = useCallback(async () => {
     const { id, trelloType, name, idList, idBoard } = cell;
 
@@ -73,7 +77,7 @@ const BoardCell = ({ cell, setBoards, board, boardIndex, cellIndex }) => {
         responseOfNewCell = await createCard(text, idList);
       }
     }
-
+    // console.log(text);
     setBoards((prevState) => {
       return prevState.map((els) =>
         els.map((el) =>
