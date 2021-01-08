@@ -140,20 +140,21 @@ const BoardCell = ({ cell, setBoards, boardIndex, cellIndex }) => {
         name={cell.id}
         value={text}
         onKeyDown={onEnterPress}
-        disabled={cellIndex === BOARD_CENTER_INDEX}
+        disabled={cell.isCenter}
         onChange={(e) => {
           setText(e.target.value);
         }}
       />
 
-      {cellIndex === BOARD_CENTER_INDEX && (
+      {cell.isCenter && (
         <Hover>
           <HoverContainer>
             <HoverContainer.Plus />
           </HoverContainer>
         </Hover>
       )}
-      {cellIndex !== BOARD_CENTER_INDEX && cell.name && (
+
+      {!cell.isCenter && cell.name && (
         <HoverContainer.Close
           onClick={() => {
             openDeleteConfirmModal(

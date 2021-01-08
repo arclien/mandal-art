@@ -32,13 +32,30 @@ const GridProvider = ({ children }) => {
       (item) => item.id === destinationId
     );
 
-    // center cell은 drag / drop 불가
-    // if (
-    //   sourceIndex === BOARD_CENTER_INDEX ||
-    //   destinationIndex === BOARD_CENTER_INDEX
-    // ) {
-    //   return;
-    // }
+    // console.log(sourceIndex, destinationIndex);
+    // If source/destination is unknown, do nothing.
+    if (sourceId === -1 || destinationId === -1) {
+      return;
+    }
+
+    const offset = destinationIndex - sourceIndex;
+
+    setDragItems((prevState) =>
+      replaceArrayOnArray(
+        prevState,
+        boardIndex,
+        moveElement(prevState[boardIndex], sourceIndex, offset)
+      )
+    );
+  };
+
+  const dropItem = (boardIndex, sourceId, destinationId) => {
+    const sourceIndex = dragItems[boardIndex].findIndex(
+      (item) => item.id === sourceId
+    );
+    const destinationIndex = dragItems[boardIndex].findIndex(
+      (item) => item.id === destinationId
+    );
 
     // console.log(sourceIndex, destinationIndex);
     // If source/destination is unknown, do nothing.
@@ -73,7 +90,7 @@ const GridProvider = ({ children }) => {
     <Provider
       value={{
         state: { dragItems },
-        actions: { moveItem, setDragItems },
+        actions: { moveItem, dropItem, setDragItems },
       }}
     >
       {children}
