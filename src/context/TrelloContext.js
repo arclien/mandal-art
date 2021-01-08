@@ -13,11 +13,12 @@ import { insertItemOnArray, getUUID } from 'utils/utils';
 import { BOARD_CENTER_INDEX, BOARD_LENGTH } from 'constants/board';
 
 const getDummyList = (currentLength, trelloType, defaultProps = {}) =>
-  Array.from({ length: BOARD_LENGTH - 1 - currentLength }, () => ({
+  Array.from({ length: BOARD_LENGTH - 1 - currentLength }, (v, i) => ({
     ...defaultProps,
     id: `${getUUID()}`,
     name: '',
     trelloType,
+    pos: currentLength + i + 1,
   }));
 
 const getCardsByListId = (cards, listId) =>
@@ -40,6 +41,7 @@ const generateBoard = (board, lists, cards) => {
       name: board.name,
       trelloType: TRELLO_COLLECTION_TYPE.BOARDS,
       isCenter: true,
+      pos: BOARD_CENTER_INDEX,
     }
   );
 
@@ -55,17 +57,19 @@ const generateBoard = (board, lists, cards) => {
             ? TRELLO_COLLECTION_TYPE.BOARDS
             : TRELLO_COLLECTION_TYPE.LISTS,
         isCenter: i === BOARD_CENTER_INDEX,
+        pos: i,
       }));
     }
 
     // 각 리스트(보드)에 종속된 카드 (셀) 필터
     const _cards = getCardsByListId(cards, list.id).map(
-      ({ id, name, idBoard, idList }) => ({
+      ({ id, name, idBoard, idList }, _index) => ({
         id,
         name,
         idBoard,
         idList,
         trelloType: TRELLO_COLLECTION_TYPE.CARDS,
+        pos: _index,
       })
     );
 
@@ -85,6 +89,7 @@ const generateBoard = (board, lists, cards) => {
         idBoard: list.idBoard,
         trelloType: TRELLO_COLLECTION_TYPE.LISTS,
         isCenter: true,
+        pos: BOARD_CENTER_INDEX,
       }
     );
   });

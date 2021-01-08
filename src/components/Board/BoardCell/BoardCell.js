@@ -34,7 +34,7 @@ const validateBeforeSave = (cell, board, text) => {
 };
 
 const BoardCell = ({ cell, setBoards, boardIndex, cellIndex }) => {
-  // console.log(cell.name);
+  // console.log(cell);
   const {
     actions: { openDeleteConfirmModal },
   } = useContext(ConfirmModalContext);
@@ -48,9 +48,10 @@ const BoardCell = ({ cell, setBoards, boardIndex, cellIndex }) => {
   useEffect(() => {
     setText(cell.name);
   }, [cell]);
-  const onEnter = useCallback(async () => {
-    const { id, trelloType, name, idList, idBoard } = cell;
 
+  const onEnter = useCallback(async () => {
+    const { id, trelloType, name, idList, idBoard, pos } = cell;
+    // console.log(cell);
     if (!validateBeforeSave(cell, boards[cellIndex], text)) {
       setText(name);
       return;
@@ -68,13 +69,13 @@ const BoardCell = ({ cell, setBoards, boardIndex, cellIndex }) => {
       if (name) {
         updateList({ ...cell, name: text });
       } else {
-        responseOfNewCell = await createList(text, idBoard);
+        responseOfNewCell = await createList(text, idBoard, pos);
       }
     } else if (trelloType === TRELLO_COLLECTION_TYPE.CARDS) {
       if (name) {
         updateCard({ ...cell, name: text });
       } else {
-        responseOfNewCell = await createCard(text, idList);
+        responseOfNewCell = await createCard(text, idList, pos);
       }
     }
     // console.log(text);

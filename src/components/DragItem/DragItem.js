@@ -5,7 +5,7 @@ const DragItem = memo(({ id, onMoveItem, boardIndex, children }) => {
   const ref = useRef(null);
 
   const [{ isDragging }, connectDrag] = useDrag({
-    item: { id, type: 'IMG' },
+    item: { id, type: id === 4 ? 'CENTER' : 'CELL' },
     collect: (monitor) => {
       return {
         isDragging: monitor.isDragging(),
@@ -14,7 +14,7 @@ const DragItem = memo(({ id, onMoveItem, boardIndex, children }) => {
   });
 
   const [, connectDrop] = useDrop({
-    accept: 'IMG',
+    accept: 'CELL',
     hover(hoveredOverItem) {
       if (hoveredOverItem.id !== id) {
         onMoveItem(boardIndex, hoveredOverItem.id, id);

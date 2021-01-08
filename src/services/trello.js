@@ -66,11 +66,11 @@ export const createLabel = async (tagName, idBoard) => {
 };
 
 // eslint-disable-next-line no-unused-vars
-export const createCard = async (name, idList) => {
+export const createCard = async (name, idList, pos) => {
   const newCard = {
     idList,
     name,
-    pos: 'bottom',
+    pos,
   };
   return postTrello('cards', newCard);
 };
@@ -78,18 +78,19 @@ export const createCard = async (name, idList) => {
 export const updateCard = async (cell) => {
   if (!cell) return;
 
-  const { id, name } = cell;
+  const { id, name, pos } = cell;
   const card = {
     name,
+    pos,
   };
   return putTrello(`${TRELLO_COLLECTION_TYPE.CARDS}/${id}`, card);
 };
 
-export const createList = async (name, idBoard) => {
+export const createList = async (name, idBoard, pos) => {
   const newList = {
     idBoard,
     name,
-    pos: 'bottom',
+    pos,
   };
   return postTrello('lists', newList);
 };
