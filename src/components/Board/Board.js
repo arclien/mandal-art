@@ -32,57 +32,157 @@ const Board = ({ board, setBoards, boardIndex }) => {
   // console.log(dragItems[boardIndex]);
 
   return (
-    <GridContainer>
-      {dragItems[boardIndex]
-        ?.slice(0, BOARD_CENTER_INDEX)
-        .map((cell, index) => (
+    <>
+      {dragItems && dragItems[boardIndex] && dragItems[boardIndex].length > 0 && (
+        <GridContainer>
           <DragItem
-            key={cell.id}
-            id={cell.id}
+            key={dragItems[boardIndex][0]?.id}
+            id={dragItems[boardIndex][0]?.id}
             boardIndex={boardIndex}
             onMoveItem={moveItem}
           >
             <GridItem>
               <BoardCell
-                key={cell.id}
-                cell={cell}
+                key={dragItems[boardIndex][0]?.id}
+                cell={dragItems[boardIndex][0]}
                 setBoards={setBoards}
                 boardIndex={boardIndex}
-                cellIndex={index}
+                cellIndex={0}
               />
             </GridItem>
           </DragItem>
-        ))}
-      <GridItem>
-        <BoardCell
-          key={centerCell[0].id}
-          cell={centerCell[0]}
-          setBoards={setBoards}
-          boardIndex={boardIndex}
-          cellIndex={BOARD_CENTER_INDEX}
-        />
-      </GridItem>
-      {dragItems[boardIndex]
-        ?.slice(BOARD_CENTER_INDEX, BOARD_LENGTH - 1)
-        .map((cell, index) => (
+
           <DragItem
-            key={cell.id}
-            id={cell.id}
+            key={dragItems[boardIndex][1]?.id}
+            id={dragItems[boardIndex][1]?.id}
             boardIndex={boardIndex}
             onMoveItem={moveItem}
           >
             <GridItem>
               <BoardCell
-                key={cell.id}
-                cell={cell}
+                key={dragItems[boardIndex][1]?.id}
+                cell={dragItems[boardIndex][1]}
                 setBoards={setBoards}
                 boardIndex={boardIndex}
-                cellIndex={index + BOARD_CENTER_INDEX + 1}
+                cellIndex={1}
               />
             </GridItem>
           </DragItem>
-        ))}
-    </GridContainer>
+
+          <DragItem
+            key={dragItems[boardIndex][2]?.id}
+            id={dragItems[boardIndex][2]?.id}
+            boardIndex={boardIndex}
+            onMoveItem={moveItem}
+          >
+            <GridItem>
+              <BoardCell
+                key={dragItems[boardIndex][2]?.id}
+                cell={dragItems[boardIndex][2]}
+                setBoards={setBoards}
+                boardIndex={boardIndex}
+                cellIndex={2}
+              />
+            </GridItem>
+          </DragItem>
+
+          <DragItem
+            key={dragItems[boardIndex][3]?.id}
+            id={dragItems[boardIndex][3]?.id}
+            boardIndex={boardIndex}
+            onMoveItem={moveItem}
+          >
+            <GridItem>
+              <BoardCell
+                key={dragItems[boardIndex][3]?.id}
+                cell={dragItems[boardIndex][3]}
+                setBoards={setBoards}
+                boardIndex={boardIndex}
+                cellIndex={3}
+              />
+            </GridItem>
+          </DragItem>
+
+          <GridItem>
+            <BoardCell
+              key={centerCell[0].id}
+              cell={centerCell[0]}
+              setBoards={setBoards}
+              boardIndex={boardIndex}
+              cellIndex={BOARD_CENTER_INDEX}
+            />
+          </GridItem>
+
+          <DragItem
+            key={dragItems[boardIndex][4]?.id}
+            id={dragItems[boardIndex][4]?.id}
+            boardIndex={boardIndex}
+            onMoveItem={moveItem}
+          >
+            <GridItem>
+              <BoardCell
+                key={dragItems[boardIndex][4]?.id}
+                cell={dragItems[boardIndex][4]}
+                setBoards={setBoards}
+                boardIndex={boardIndex}
+                cellIndex={4}
+              />
+            </GridItem>
+          </DragItem>
+
+          <DragItem
+            key={dragItems[boardIndex][5]?.id}
+            id={dragItems[boardIndex][5]?.id}
+            boardIndex={boardIndex}
+            onMoveItem={moveItem}
+          >
+            <GridItem>
+              <BoardCell
+                key={dragItems[boardIndex][5]?.id}
+                cell={dragItems[boardIndex][5]}
+                setBoards={setBoards}
+                boardIndex={boardIndex}
+                cellIndex={5}
+              />
+            </GridItem>
+          </DragItem>
+
+          <DragItem
+            key={dragItems[boardIndex][6]?.id}
+            id={dragItems[boardIndex][6]?.id}
+            boardIndex={boardIndex}
+            onMoveItem={moveItem}
+          >
+            <GridItem>
+              <BoardCell
+                key={dragItems[boardIndex][6]?.id}
+                cell={dragItems[boardIndex][6]}
+                setBoards={setBoards}
+                boardIndex={boardIndex}
+                cellIndex={6}
+              />
+            </GridItem>
+          </DragItem>
+
+          <DragItem
+            key={dragItems[boardIndex][7]?.id}
+            id={dragItems[boardIndex][7]?.id}
+            boardIndex={boardIndex}
+            onMoveItem={moveItem}
+          >
+            <GridItem>
+              <BoardCell
+                key={dragItems[boardIndex][7]?.id}
+                cell={dragItems[boardIndex][7]}
+                setBoards={setBoards}
+                boardIndex={boardIndex}
+                cellIndex={7}
+              />
+            </GridItem>
+          </DragItem>
+        </GridContainer>
+      )}
+    </>
   );
 };
 

@@ -9,13 +9,11 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <DndProvider backend={HTML5Backend}>
-      <GridProvider>
-        <App />
-      </GridProvider>
-    </DndProvider>
-  </React.StrictMode>,
+  <DndProvider backend={HTML5Backend}>
+    <GridProvider>
+      <App />
+    </GridProvider>
+  </DndProvider>,
   document.getElementById('root')
 );
 
