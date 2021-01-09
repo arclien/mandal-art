@@ -2,7 +2,6 @@ import React, { useState, createContext } from 'react';
 
 import { updateCard } from 'services/trello';
 import { replaceArrayOnArray } from 'utils/utils';
-import { BOARD_CENTER_INDEX } from 'constants/board';
 
 const move = (array, oldIndex, newIndex) => {
   if (newIndex >= array.length) {
@@ -49,41 +48,22 @@ const GridProvider = ({ children }) => {
     );
   };
 
-  const dropItem = (boardIndex, sourceId, destinationId) => {
-    const sourceIndex = dragItems[boardIndex].findIndex(
-      (item) => item.id === sourceId
-    );
+  const dropItem = async (boardIndex, destinationId, fetchCardsOnList) => {
     const destinationIndex = dragItems[boardIndex].findIndex(
       (item) => item.id === destinationId
     );
+    const items = dragItems[boardIndex]
+      .splice(destinationIndex)
+      .filter((el) => el.name);
 
-    // console.log(sourceIndex, destinationIndex);
-    // If source/destination is unknown, do nothing.
-    if (sourceId === -1 || destinationId === -1) {
-      return;
-    }
-
-    const offset = destinationIndex - sourceIndex;
-    // console.log(sourceIndex, destinationIndex);
-    // console.log(dragItems[boardIndex][sourceIndex]);
-    // console.log(dragItems[boardIndex][destinationIndex]);
-    // TODO 한칸씩은 잘 이동되는데, 한번에 여러 칸 이동이 안됨
-    // updateCard({
-    //   ...dragItems[boardIndex][sourceIndex],
-    //   pos: destinationIndex,
-    // });
-    // updateCard({
-    //   ...dragItems[boardIndex][destinationIndex],
-    //   pos: sourceIndex,
-    // });
-
-    setDragItems((prevState) =>
-      replaceArrayOnArray(
-        prevState,
-        boardIndex,
-        moveElement(prevState[boardIndex], sourceIndex, offset)
-      )
+    const promises = items.map((item, index) =>
+      updateCard({
+        ...item,
+        pos: index + destinationIndex,
+      })
     );
+    await Promise.all(promises);
+    await fetchCardsOnList(items[0].idList, boardIndex);
   };
 
   return (

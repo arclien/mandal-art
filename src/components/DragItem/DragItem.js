@@ -1,8 +1,14 @@
-import React, { memo, useRef } from 'react';
+import React, { useContext, memo, useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
+
+import { TrelloContext } from 'context/TrelloContext';
 
 const DragItem = memo(
   ({ id, onMoveItem, onDropItem, boardIndex, children }) => {
+    const {
+      actions: { fetchCardsOnList },
+    } = useContext(TrelloContext);
+
     const ref = useRef(null);
 
     const [{ isDragging }, connectDrag] = useDrag({
@@ -21,11 +27,9 @@ const DragItem = memo(
           onMoveItem(boardIndex, hoveredOverItem.id, id);
         }
       },
-      // drop(dropOverItem) {
-      //   if (dropOverItem.id !== id) {
-      //     onDropItem(boardIndex, dropOverItem.id, id);
-      //   }
-      // },
+      drop() {
+        onDropItem(boardIndex, id, fetchCardsOnList);
+      },
     });
 
     connectDrag(ref);

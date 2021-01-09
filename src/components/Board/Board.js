@@ -3,7 +3,7 @@ import React, { useEffect, useContext } from 'react';
 import DragItem from 'components/DragItem/DragItem';
 import { GridContext } from 'context/GridContext';
 import BoardCell from './BoardCell/BoardCell';
-import { BOARD_LENGTH, BOARD_CENTER_INDEX } from 'constants/board';
+import { BOARD_CENTER_INDEX } from 'constants/board';
 import { replaceArrayOnArray } from 'utils/utils';
 
 import { GridContainer, GridItemWrapper } from './Board.styles';

@@ -43,10 +43,10 @@ const BoardCell = ({ cell, setBoards, boardIndex, cellIndex }) => {
     state: { boards },
   } = useContext(TrelloContext);
 
-  const [text, setText] = useState(cell.name);
+  const [text, setText] = useState(cell?.name);
 
   useEffect(() => {
-    setText(cell.name);
+    setText(cell?.name);
   }, [cell]);
 
   const onEnter = useCallback(async () => {
@@ -133,20 +133,20 @@ const BoardCell = ({ cell, setBoards, boardIndex, cellIndex }) => {
 
   return (
     <Container
-      isCenter={cell.isCenter}
+      isCenter={cell?.isCenter}
       isMainBoard={boardIndex === BOARD_CENTER_INDEX}
     >
       <TextArea
-        name={cell.id}
+        name={cell?.id}
         value={text}
         onKeyDown={onEnterPress}
-        disabled={cell.isCenter}
+        disabled={cell?.isCenter}
         onChange={(e) => {
           setText(e.target.value);
         }}
       />
 
-      {cell.isCenter && (
+      {cell?.isCenter && (
         <Hover>
           <HoverContainer>
             <HoverContainer.Plus />
@@ -154,12 +154,12 @@ const BoardCell = ({ cell, setBoards, boardIndex, cellIndex }) => {
         </Hover>
       )}
 
-      {!cell.isCenter && cell.name && (
+      {!cell?.isCenter && cell?.name && (
         <HoverContainer.Close
           onClick={() => {
             openDeleteConfirmModal(
               deleteOkCallback,
-              `"${cell.name}"을 삭제 하시겠습니까?`
+              `"${cell?.name}"을 삭제 하시겠습니까?`
             );
           }}
         />

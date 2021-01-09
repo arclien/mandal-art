@@ -7,9 +7,10 @@ import {
   getCardsOnBoard,
   getListsOnBoard,
   getBoard,
+  getCardsOnList,
 } from 'services/trello';
 import { authTrello } from 'services/trelloApi';
-import { insertItemOnArray, getUUID } from 'utils/utils';
+import { insertItemOnArray, getUUID, replaceArrayOnArray } from 'utils/utils';
 import { BOARD_CENTER_INDEX, BOARD_LENGTH } from 'constants/board';
 
 const getDummyList = (currentLength, trelloType, defaultProps = {}) =>
@@ -126,7 +127,7 @@ const TrelloProvider = ({ children }) => {
 
           const _boards = generateBoard(board, lists, cards, labels);
           setBoards(_boards);
-          // console.log(_boards);
+
           setTrelloObjects((prevState) => ({
             ...prevState,
             board,
@@ -146,6 +147,46 @@ const TrelloProvider = ({ children }) => {
     })();
   }, [trelloBoardId]);
 
+  const fetchCardsOnList = async (_idList, boardIndex) => {
+    const _cards = await getCardsOnList(_idList);
+
+    setBoards((prevState) => {
+      const { idBoard } = prevState[boardIndex][BOARD_CENTER_INDEX];
+      const idList = prevState[boardIndex][BOARD_CENTER_INDEX].id;
+      return replaceArrayOnArray(
+        prevState,
+        boardIndex,
+        insertItemOnArray(
+          [
+            ..._cards.map(({ id, name, pos }) => ({
+              id,
+              name,
+              idList,
+              idBoard,
+              trelloType:
+                boardIndex === BOARD_CENTER_INDEX
+                  ? TRELLO_COLLECTION_TYPE.LISTS
+                  : TRELLO_COLLECTION_TYPE.CARDS,
+              isCenter: false,
+              pos,
+            })),
+            ...getDummyList(_cards.length, TRELLO_COLLECTION_TYPE.CARDS, {
+              idBoard,
+              idList,
+            }),
+          ],
+          BOARD_CENTER_INDEX,
+          prevState[boardIndex][BOARD_CENTER_INDEX]
+        )
+      );
+    });
+
+    setTrelloObjects((prevState) => ({
+      ...prevState,
+      _cards,
+    }));
+  };
+
   return (
     <Provider
       value={{
@@ -157,6 +198,7 @@ const TrelloProvider = ({ children }) => {
           setBoards,
           setTrelloBoardId,
           setTrelloObjects,
+          fetchCardsOnList,
         },
       }}
     >

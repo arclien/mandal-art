@@ -44,6 +44,14 @@ export const getCardOnBoardById = (boardId, cardId) => {
 };
 
 /** 
+################ Get from List
+* */
+
+export const getCardsOnList = (listId) => {
+  return getTrello(`lists/${listId}/cards/`);
+};
+
+/** 
 ################ Get collections by id
 * */
 export const getCardById = (cardId) => {

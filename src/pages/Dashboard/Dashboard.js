@@ -34,23 +34,28 @@ const Dashboard = () => {
 
   return (
     <TrelloConsumer>
-      {({ state: { boards }, actions: { setBoards } }) => (
-        <Container>
-          {isAuthorized && !isLoaded && <Spinner />}
-          {isAuthorized && isLoaded && (
-            <BoardWrapper>
-              {boards.slice(0, BOARD_LENGTH).map((board, index) => (
-                <Board
-                  key={getUUID()}
-                  board={board}
-                  setBoards={setBoards}
-                  boardIndex={index}
-                />
-              ))}
-            </BoardWrapper>
-          )}
-        </Container>
-      )}
+      {({ state: { boards }, actions: { setBoards } }) => {
+        return (
+          <Container>
+            {isAuthorized && !isLoaded && <Spinner />}
+            {isAuthorized && isLoaded && (
+              <BoardWrapper>
+                {boards?.length > 0 &&
+                  boards
+                    .slice(0, BOARD_LENGTH)
+                    .map((board, index) => (
+                      <Board
+                        key={getUUID()}
+                        board={board}
+                        setBoards={setBoards}
+                        boardIndex={index}
+                      />
+                    ))}
+              </BoardWrapper>
+            )}
+          </Container>
+        );
+      }}
     </TrelloConsumer>
   );
 };
