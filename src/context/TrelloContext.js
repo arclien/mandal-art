@@ -50,6 +50,7 @@ const generateBoard = (board, lists, cards) => {
         id,
         name,
         idBoard,
+        url: board.shortUrl,
         trelloType:
           i === BOARD_CENTER_INDEX
             ? TRELLO_COLLECTION_TYPE.BOARDS
@@ -60,11 +61,12 @@ const generateBoard = (board, lists, cards) => {
 
     // 각 리스트(보드)에 종속된 카드 (셀) 필터
     const _cards = getCardsByListId(cards, list.id).map(
-      ({ id, name, idBoard, idList }) => ({
+      ({ id, name, idBoard, idList, shortUrl }) => ({
         id,
         name,
         idBoard,
         idList,
+        url: shortUrl,
         trelloType: TRELLO_COLLECTION_TYPE.CARDS,
       })
     );

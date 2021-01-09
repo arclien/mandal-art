@@ -1,16 +1,9 @@
 import styled from 'styled-components';
-import {
-  flexContainer,
-  blue30,
-  green50,
-  red50,
-  font,
-  text,
-  Textarea,
-} from 'remember-ui';
+import { flexContainer, blue30, green50, red50, font, text } from 'remember-ui';
 
 import plusIcon from 'assets/images/ico-plus.png';
 import closeIcon from 'assets/images/ico-close.png';
+import linkIcon from 'assets/images/ico-external-link.svg';
 
 export const Container = styled.div`
   ${flexContainer('center', 'center', 'column')};
@@ -83,7 +76,7 @@ HoverContainer.Plus = styled.img.attrs({
 HoverContainer.Close = styled.img.attrs({
   width: 20,
   height: 20,
-  alt: 'zoom',
+  alt: 'close',
   src: closeIcon,
 })`
   ${Container}:hover & {
@@ -95,5 +88,23 @@ HoverContainer.Close = styled.img.attrs({
   position: absolute;
   top: -10px;
   right: -10px;
+  padding: 5px;
+`;
+
+HoverContainer.Link = styled.img.attrs({
+  width: 20,
+  height: 20,
+  alt: 'link',
+  src: linkIcon,
+})`
+  ${Container}:hover & {
+    display: block;
+  }
+  display: none;
+
+  cursor: pointer;
+  position: absolute;
+  top: -10px;
+  left: -10px;
   padding: 5px;
 `;
