@@ -13,7 +13,6 @@ import {
   archiveListById,
 } from 'services/trello';
 import { TRELLO_COLLECTION_TYPE } from 'constants/trello';
-import { getUUID } from 'utils/utils';
 
 import { Container, TextArea, Hover, HoverContainer } from './BoardCell.styles';
 
@@ -48,10 +47,17 @@ const BoardCell = ({ cell, setBoards, board, boardIndex, cellIndex }) => {
   const onEnter = useCallback(async () => {
     const { id, trelloType, name, idList, idBoard } = cell;
 
-    if (!validateBeforeSave(cell, board, text)) {
+    if (!validateBeforeSave(cell, boards[cellIndex], text)) {
       setText(name);
       return;
     }
+
+    // TODO 리스트 삭제 => 속한 카드 모두 삭제 후, 그 상태에서 새롭게 같은  포지션에 리스트 만들고(여기까진 됨), 해당 리스트 속한 카드 추가하면 idList가 달라서 안됨.
+    // const ids =
+    //   trelloType === TRELLO_COLLECTION_TYPE.LISTS
+    //     ? boards[cellIndex].map((el) => el.id)
+    //     : [id];
+    // console.log(ids);
 
     let responseOfNewCell;
     if (trelloType === TRELLO_COLLECTION_TYPE.LISTS) {
@@ -81,7 +87,7 @@ const BoardCell = ({ cell, setBoards, board, boardIndex, cellIndex }) => {
         )
       );
     });
-  }, [setBoards, board, cell, text]);
+  }, [cell, boards, cellIndex, text, setBoards]);
 
   const onEnterPress = (e) => {
     if (e.keyCode === 13 && e.shiftKey === false) {
@@ -105,7 +111,6 @@ const BoardCell = ({ cell, setBoards, board, boardIndex, cellIndex }) => {
       deleteCardById(id);
     }
 
-    // TODO list 지울 경우, uuid, idList가 달라져서 바로 재생성 안됨
     // board 데이터 업데이트
     setBoards((prevState) => {
       return prevState.map((els) =>
@@ -113,7 +118,6 @@ const BoardCell = ({ cell, setBoards, board, boardIndex, cellIndex }) => {
           ids.includes(el.id)
             ? {
                 ...el,
-                id: `${getUUID()}`,
                 name: '',
               }
             : el
