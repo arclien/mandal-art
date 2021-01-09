@@ -18,6 +18,6 @@ export const GridOverlay = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.05);
   z-index: 9700;
 `;
