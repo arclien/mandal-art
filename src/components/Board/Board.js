@@ -44,7 +44,7 @@ const Board = ({ board, setBoards, boardIndex }) => {
         boardIndex={boardIndex}
         onMoveItem={moveItem}
         onDropItem={dropItem}
-        canDrag={canDrag}
+        canDrag={boardIndex !== BOARD_CENTER_INDEX && canDrag}
       >
         <GridItem>
           <BoardCell

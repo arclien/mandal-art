@@ -28,7 +28,7 @@ export const Container = styled.div`
   word-break: keep-all;
   text-align: center;
 
-  cursor: move;
+  cursor: ${({ isMainBoard }) => (isMainBoard ? 'pointer' : 'move')};
 `;
 
 export const TextArea = styled.textarea.attrs({
