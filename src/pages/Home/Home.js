@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 
+import { getOrganizaionById, getBoardsOnOrganization } from 'services/trello';
 import { TRELLO_MANDAL_ART_ID } from 'constants/trello';
 import { TrelloMyInfoContext } from 'context/TrelloMyInfoContext';
 
@@ -23,14 +24,20 @@ const Home = () => {
     id: '',
     idBoards: [],
     boards: [],
+    organizations: [],
+    organizationBoards: [],
   });
 
   useEffect(() => {
     (async () => {
       const {
-        me: { email, fullName, id, idBoards },
+        me: { email, fullName, id, idBoards, idOrganizations },
         boards,
       } = await getMyInfo();
+
+      const promises =
+        idOrganizations?.map((orgId) => getBoardsOnOrganization(orgId)) || [];
+      const organizationBoards = await Promise.all(promises);
 
       setMyInfo({
         email,
@@ -38,6 +45,7 @@ const Home = () => {
         id,
         idBoards,
         boards,
+        organizationBoards,
       });
     })();
   }, [getMyInfo]);
@@ -63,6 +71,18 @@ const Home = () => {
               </BoardLink.Button>
             </BoardLink>
           ))}
+        </BoardList>
+
+        <BoardList>
+          {myInfo?.organizationBoards?.map((org) =>
+            org.map(({ name, id }) => (
+              <BoardLink key={id} to={`/board/${id}`}>
+                <BoardLink.Button theme="blue" size="large" onClick={() => {}}>
+                  {name} 이동
+                </BoardLink.Button>
+              </BoardLink>
+            ))
+          )}
         </BoardList>
 
         <Filler />
