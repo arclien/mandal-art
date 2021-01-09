@@ -4,15 +4,18 @@ import { useDrag, useDrop } from 'react-dnd';
 import { TrelloContext } from 'context/TrelloContext';
 
 const DragItem = memo(
-  ({ id, onMoveItem, onDropItem, boardIndex, children }) => {
+  ({ id, onMoveItem, onDropItem, boardIndex, canDrag, children }) => {
     const {
-      actions: { fetchCardsOnList },
+      actions: { fetchCardsOnList, setCanDrag },
     } = useContext(TrelloContext);
 
     const ref = useRef(null);
 
     const [{ isDragging }, connectDrag] = useDrag({
       item: { id, type: id === 4 ? 'CENTER' : `CELL${boardIndex}` },
+      canDrag() {
+        return canDrag;
+      },
       collect: (monitor) => {
         return {
           isDragging: monitor.isDragging(),
@@ -28,6 +31,7 @@ const DragItem = memo(
         }
       },
       drop() {
+        setCanDrag(false);
         onDropItem(boardIndex, id, fetchCardsOnList);
       },
     });

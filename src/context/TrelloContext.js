@@ -110,6 +110,7 @@ const defaultTrelloObjects = {
 
 const TrelloProvider = ({ children }) => {
   const [trelloBoardId, setTrelloBoardId] = useState();
+  const [canDrag, setCanDrag] = useState(false);
   const [boards, setBoards] = useState([[]]);
   const [trelloObjects, setTrelloObjects] = useState({
     ...defaultTrelloObjects,
@@ -136,6 +137,8 @@ const TrelloProvider = ({ children }) => {
             labels,
             isLoaded: true,
           }));
+
+          setCanDrag(true);
         } catch (e) {
           setTrelloObjects({
             ...defaultTrelloObjects,
@@ -148,6 +151,7 @@ const TrelloProvider = ({ children }) => {
   }, [trelloBoardId]);
 
   const fetchCardsOnList = async (_idList, boardIndex) => {
+    if (canDrag) setCanDrag(false);
     const _cards = await getCardsOnList(_idList);
 
     setBoards((prevState) => {
@@ -185,16 +189,19 @@ const TrelloProvider = ({ children }) => {
       ...prevState,
       _cards,
     }));
+    setCanDrag(true);
   };
 
   return (
     <Provider
       value={{
         state: {
+          canDrag,
           boards,
           trelloObjects,
         },
         actions: {
+          setCanDrag,
           setBoards,
           setTrelloBoardId,
           setTrelloObjects,
