@@ -2,6 +2,7 @@ import React, { useEffect, useContext } from 'react';
 import { useRouteMatch, useHistory } from 'react-router-dom';
 import { Spinner } from 'remember-ui';
 
+import LabelContainer from './LabelContainer/LabelContainer';
 import { TrelloContext, TrelloConsumer } from 'context/TrelloContext';
 import Board from 'components/Board/Board';
 import { getUUID } from 'utils/utils';
@@ -39,19 +40,22 @@ const Dashboard = () => {
           <Container>
             {isAuthorized && !isLoaded && <Spinner />}
             {isAuthorized && isLoaded && (
-              <BoardWrapper>
-                {boards?.length > 0 &&
-                  boards
-                    .slice(0, BOARD_LENGTH)
-                    .map((board, index) => (
-                      <Board
-                        key={getUUID()}
-                        board={board}
-                        setBoards={setBoards}
-                        boardIndex={index}
-                      />
-                    ))}
-              </BoardWrapper>
+              <>
+                <LabelContainer />
+                <BoardWrapper>
+                  {boards?.length > 0 &&
+                    boards
+                      .slice(0, BOARD_LENGTH)
+                      .map((board, index) => (
+                        <Board
+                          key={getUUID()}
+                          board={board}
+                          setBoards={setBoards}
+                          boardIndex={index}
+                        />
+                      ))}
+                </BoardWrapper>
+              </>
             )}
           </Container>
         );

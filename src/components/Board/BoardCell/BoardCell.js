@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback, useContext } from 'react';
 
 import BoardCellHover from '../BoardCellHover/BoardCellHover';
+import BoardCellLabel from '../BoardCellLabel/BoardCellLabel';
 import BoardCellBadge from '../BoardCellBadge/BoardCellBadge';
 import { TrelloContext } from 'context/TrelloContext';
 import { BOARD_CENTER_INDEX } from 'constants/board';
@@ -97,12 +98,15 @@ const BoardCell = ({ cell, boardIndex, cellIndex }) => {
   };
 
   const { id, badges, idChecklists, labels, isCenter } = cell;
-  // console.log(badges);
+
   return (
     <Container
       isCenter={isCenter}
       isMainBoard={boardIndex === BOARD_CENTER_INDEX}
     >
+      {labels && labels.length > 0 && (
+        <BoardCellLabel labels={labels} showFull={false} />
+      )}
       <TextArea
         name={id}
         value={text}
@@ -114,11 +118,7 @@ const BoardCell = ({ cell, boardIndex, cellIndex }) => {
       />
 
       {text && badges && (
-        <BoardCellBadge
-          badges={badges}
-          labels={labels}
-          idChecklists={idChecklists}
-        />
+        <BoardCellBadge badges={badges} idChecklists={idChecklists} />
       )}
 
       {text && (

@@ -5,7 +5,7 @@ import { CalendarFormatShort } from 'constants/calendar';
 
 import { Container, Due, Check, Comment } from './BoardCellBadge.styles';
 
-const BoardCellBadge = ({ badges, labels, idChecklists }) => {
+const BoardCellBadge = ({ badges, idChecklists }) => {
   const {
     checkItems,
     checkItemsChecked,
