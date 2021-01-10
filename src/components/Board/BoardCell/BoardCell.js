@@ -1,21 +1,20 @@
 import React, { useEffect, useState, useCallback, useContext } from 'react';
 
-import { ConfirmModalContext } from 'context/ConfirmModalContext';
+import BoardCellHover from '../BoardCellHover/BoardCellHover';
+import BoardCellLabel from '../BoardCellLabel/BoardCellLabel';
+import BoardCellBadge from '../BoardCellBadge/BoardCellBadge';
 import { TrelloContext } from 'context/TrelloContext';
 import { BOARD_CENTER_INDEX } from 'constants/board';
 import { errorToast } from 'utils/toast';
-import { browserOpen } from 'utils/utils';
 import {
   updateList,
   createList,
   updateCard,
   createCard,
-  deleteCardById,
-  archiveListById,
 } from 'services/trello';
 import { TRELLO_COLLECTION_TYPE } from 'constants/trello';
 
-import { Container, TextArea, Hover, HoverContainer } from './BoardCell.styles';
+import { Container, TextArea } from './BoardCell.styles';
 
 const validateBeforeSave = (cell, board, text) => {
   const { trelloType } = cell;
@@ -34,14 +33,10 @@ const validateBeforeSave = (cell, board, text) => {
   return true;
 };
 
-const BoardCell = ({ cell, setBoards, boardIndex, cellIndex }) => {
-  // console.log(cell);
-  const {
-    actions: { openDeleteConfirmModal },
-  } = useContext(ConfirmModalContext);
-
+const BoardCell = ({ cell, boardIndex, cellIndex }) => {
   const {
     state: { boards },
+    actions: { setBoards },
   } = useContext(TrelloContext);
 
   const [text, setText] = useState(cell?.name);
@@ -53,7 +48,7 @@ const BoardCell = ({ cell, setBoards, boardIndex, cellIndex }) => {
   const onEnter = useCallback(async () => {
     const { id, trelloType, name, idList, idBoard, pos } = cell;
     // console.log(cell);
-    if (!validateBeforeSave(cell, boards[cellIndex], text)) {
+    if (!validateBeforeSave(cell, boards[boardIndex], text)) {
       setText(name);
       return;
     }
@@ -93,7 +88,7 @@ const BoardCell = ({ cell, setBoards, boardIndex, cellIndex }) => {
         )
       );
     });
-  }, [cell, boards, cellIndex, text, setBoards]);
+  }, [cell, boards, boardIndex, text, setBoards]);
 
   const onEnterPress = (e) => {
     if (e.keyCode === 13 && e.shiftKey === false) {
@@ -102,75 +97,36 @@ const BoardCell = ({ cell, setBoards, boardIndex, cellIndex }) => {
     }
   };
 
-  const deleteOkCallback = useCallback(() => {
-    const { id, trelloType } = cell;
-
-    const ids =
-      trelloType === TRELLO_COLLECTION_TYPE.LISTS
-        ? boards[cellIndex].filter((el) => el.name).map((el) => el.id)
-        : [id];
-
-    // trello 삭제 api call
-    if (trelloType === TRELLO_COLLECTION_TYPE.LISTS) {
-      archiveListById(id, false);
-    } else if (trelloType === TRELLO_COLLECTION_TYPE.CARDS) {
-      deleteCardById(id);
-    }
-
-    // board 데이터 업데이트
-    setBoards((prevState) => {
-      return prevState.map((els) =>
-        els.map((el) =>
-          ids.includes(el.id)
-            ? {
-                ...el,
-                name: '',
-              }
-            : el
-        )
-      );
-    });
-  }, [cell, boards, cellIndex, setBoards]);
+  const { id, badges, idChecklists, labels, isCenter } = cell;
 
   return (
     <Container
-      isCenter={cell?.isCenter}
+      isCenter={isCenter}
       isMainBoard={boardIndex === BOARD_CENTER_INDEX}
     >
+      {labels && labels.length > 0 && (
+        <BoardCellLabel labels={labels} showFull={false} />
+      )}
       <TextArea
-        name={cell?.id}
+        name={id}
         value={text}
         onKeyDown={onEnterPress}
-        disabled={cell?.isCenter}
+        disabled={isCenter}
         onChange={(e) => {
           setText(e.target.value);
         }}
       />
 
-      {cell?.isCenter && (
-        <Hover>
-          <HoverContainer>
-            <HoverContainer.Plus />
-          </HoverContainer>
-        </Hover>
+      {text && badges && (
+        <BoardCellBadge badges={badges} idChecklists={idChecklists} />
       )}
 
-      {cellIndex !== BOARD_CENTER_INDEX && cell.name && (
-        <>
-          <HoverContainer.Close
-            onClick={() => {
-              openDeleteConfirmModal(
-                deleteOkCallback,
-                `"${cell.name}"을 삭제 하시겠습니까?`
-              );
-            }}
-          />
-          <HoverContainer.Link
-            onClick={() => {
-              browserOpen(cell.url);
-            }}
-          />
-        </>
+      {text && (
+        <BoardCellHover
+          boardIndex={boardIndex}
+          cell={cell}
+          cellIndex={cellIndex}
+        />
       )}
     </Container>
   );

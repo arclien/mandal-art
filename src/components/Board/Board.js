@@ -14,7 +14,7 @@ const GridItem = ({ forwardedRef, ...props }) => (
   <GridItemWrapper ref={forwardedRef} {...props} />
 );
 
-const Board = ({ board, setBoards, boardIndex }) => {
+const Board = ({ board, boardIndex }) => {
   const {
     state: { dragItems },
     actions: { moveItem, dropItem, setDragItems },
@@ -50,17 +50,19 @@ const Board = ({ board, setBoards, boardIndex }) => {
           <BoardCell
             key={item?.id}
             cell={item}
-            setBoards={setBoards}
             boardIndex={boardIndex}
-            cellIndex={index}
+            // dragItem은 center cell을 제외한 배열 dragItems에서 가져오기 때문에, index가 0~7이다.
+            // index4(BOARD_CENTER_INDEX)는 따로 렌더링 하기에, dragItem index4 => 5로 하나씩 올려줘야 한다.
+            cellIndex={index >= BOARD_CENTER_INDEX ? index + 1 : index}
           />
         </GridItem>
       </DragItem>
     );
   };
+
   return (
     <>
-      {dragItems && dragItems[boardIndex] && dragItems[boardIndex].length > 0 && (
+      {dragItems && dragItems[boardIndex]?.length > 0 && (
         <GridContainer>
           {!canDrag && (
             <GridOverlay>
@@ -76,7 +78,6 @@ const Board = ({ board, setBoards, boardIndex }) => {
             <BoardCell
               key={centerCell[0].id}
               cell={centerCell[0]}
-              setBoards={setBoards}
               boardIndex={boardIndex}
               cellIndex={BOARD_CENTER_INDEX}
             />

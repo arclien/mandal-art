@@ -1,4 +1,3 @@
-import { getRandomInt } from 'utils/utils';
 import {
   getTrello,
   getColletionTrello,
@@ -6,7 +5,7 @@ import {
   postTrello,
   putTrello,
 } from 'services/trelloApi';
-import { TRELLO_COLLECTION_TYPE, TRELLO_LABEL_COLOR } from 'constants/trello';
+import { TRELLO_COLLECTION_TYPE } from 'constants/trello';
 
 export const getMe = () => {
   return getTrello('members/me');
@@ -70,15 +69,19 @@ export const getListById = (listId) => {
   return getColletionTrello(TRELLO_COLLECTION_TYPE.LISTS, listId);
 };
 
-export const createLabel = async (tagName, idBoard) => {
-  const index = getRandomInt(0, TRELLO_LABEL_COLOR.length);
-  const newLabel = {
-    name: tagName,
-    color: TRELLO_LABEL_COLOR[index],
-    idBoard,
-  };
-  const res = await postTrello('labels', newLabel);
+export const createLabel = async (label) => {
+  const res = await postTrello('labels', label);
   return res;
+};
+
+export const updateLabel = async (idLabel, label) => {
+  const newLabel = { ...label };
+  const res = await putTrello(`labels/${idLabel}`, newLabel);
+  return res;
+};
+
+export const deleteLabel = async (idLabel) => {
+  return deleteTrello(`labels/${idLabel}`);
 };
 
 // eslint-disable-next-line no-unused-vars
