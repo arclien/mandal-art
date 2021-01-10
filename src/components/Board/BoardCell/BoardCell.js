@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext } from 'react';
+import React, { useEffect, useState, useCallback, useContext } from 'react';
 
 import { ConfirmModalContext } from 'context/ConfirmModalContext';
 import { TrelloContext } from 'context/TrelloContext';
@@ -34,7 +34,8 @@ const validateBeforeSave = (cell, board, text) => {
   return true;
 };
 
-const BoardCell = ({ cell, setBoards, board, boardIndex, cellIndex }) => {
+const BoardCell = ({ cell, setBoards, boardIndex, cellIndex }) => {
+  // console.log(cell);
   const {
     actions: { openDeleteConfirmModal },
   } = useContext(ConfirmModalContext);
@@ -43,11 +44,15 @@ const BoardCell = ({ cell, setBoards, board, boardIndex, cellIndex }) => {
     state: { boards },
   } = useContext(TrelloContext);
 
-  const [text, setText] = useState(cell.name);
+  const [text, setText] = useState(cell?.name);
+
+  useEffect(() => {
+    setText(cell?.name);
+  }, [cell]);
 
   const onEnter = useCallback(async () => {
-    const { id, trelloType, name, idList, idBoard } = cell;
-
+    const { id, trelloType, name, idList, idBoard, pos } = cell;
+    // console.log(cell);
     if (!validateBeforeSave(cell, boards[cellIndex], text)) {
       setText(name);
       return;
@@ -65,16 +70,16 @@ const BoardCell = ({ cell, setBoards, board, boardIndex, cellIndex }) => {
       if (name) {
         updateList({ ...cell, name: text });
       } else {
-        responseOfNewCell = await createList(text, idBoard);
+        responseOfNewCell = await createList(text, idBoard, pos);
       }
     } else if (trelloType === TRELLO_COLLECTION_TYPE.CARDS) {
       if (name) {
         updateCard({ ...cell, name: text });
       } else {
-        responseOfNewCell = await createCard(text, idList);
+        responseOfNewCell = await createCard(text, idList, pos);
       }
     }
-
+    // console.log(text);
     setBoards((prevState) => {
       return prevState.map((els) =>
         els.map((el) =>
@@ -129,26 +134,27 @@ const BoardCell = ({ cell, setBoards, board, boardIndex, cellIndex }) => {
 
   return (
     <Container
-      isCenter={cell.isCenter}
+      isCenter={cell?.isCenter}
       isMainBoard={boardIndex === BOARD_CENTER_INDEX}
     >
       <TextArea
-        name={cell.id}
+        name={cell?.id}
         value={text}
         onKeyDown={onEnterPress}
-        disabled={cellIndex === BOARD_CENTER_INDEX}
+        disabled={cell?.isCenter}
         onChange={(e) => {
           setText(e.target.value);
         }}
       />
 
-      {cellIndex === BOARD_CENTER_INDEX && (
+      {cell?.isCenter && (
         <Hover>
           <HoverContainer>
             <HoverContainer.Plus />
           </HoverContainer>
         </Hover>
       )}
+
       {cellIndex !== BOARD_CENTER_INDEX && cell.name && (
         <>
           <HoverContainer.Close

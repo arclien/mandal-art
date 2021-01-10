@@ -20,6 +20,8 @@ export const Container = styled.div`
   box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 7px;
   word-break: keep-all;
   text-align: center;
+
+  cursor: ${({ isMainBoard }) => (isMainBoard ? 'pointer' : 'move')};
 `;
 
 export const TextArea = styled.textarea.attrs({

@@ -7,17 +7,19 @@ import {
   getCardsOnBoard,
   getListsOnBoard,
   getBoard,
+  getCardsOnList,
 } from 'services/trello';
 import { authTrello } from 'services/trelloApi';
-import { insertItemOnArray, getUUID } from 'utils/utils';
+import { insertItemOnArray, getUUID, replaceArrayOnArray } from 'utils/utils';
 import { BOARD_CENTER_INDEX, BOARD_LENGTH } from 'constants/board';
 
 const getDummyList = (currentLength, trelloType, defaultProps = {}) =>
-  Array.from({ length: BOARD_LENGTH - 1 - currentLength }, () => ({
+  Array.from({ length: BOARD_LENGTH - 1 - currentLength }, (v, i) => ({
     ...defaultProps,
     id: `${getUUID()}`,
     name: '',
     trelloType,
+    pos: currentLength + i + 1,
   }));
 
 const getCardsByListId = (cards, listId) =>
@@ -40,6 +42,7 @@ const generateBoard = (board, lists, cards) => {
       name: board.name,
       trelloType: TRELLO_COLLECTION_TYPE.BOARDS,
       isCenter: true,
+      pos: BOARD_CENTER_INDEX,
     }
   );
 
@@ -56,18 +59,20 @@ const generateBoard = (board, lists, cards) => {
             ? TRELLO_COLLECTION_TYPE.BOARDS
             : TRELLO_COLLECTION_TYPE.LISTS,
         isCenter: i === BOARD_CENTER_INDEX,
+        pos: i,
       }));
     }
 
     // 각 리스트(보드)에 종속된 카드 (셀) 필터
     const _cards = getCardsByListId(cards, list.id).map(
-      ({ id, name, idBoard, idList, shortUrl }) => ({
+      ({ id, name, idBoard, idList, shortUrl }, _index) => ({
         id,
         name,
         idBoard,
         idList,
         url: shortUrl,
         trelloType: TRELLO_COLLECTION_TYPE.CARDS,
+        pos: _index,
       })
     );
 
@@ -87,6 +92,7 @@ const generateBoard = (board, lists, cards) => {
         idBoard: list.idBoard,
         trelloType: TRELLO_COLLECTION_TYPE.LISTS,
         isCenter: true,
+        pos: BOARD_CENTER_INDEX,
       }
     );
   });
@@ -106,6 +112,7 @@ const defaultTrelloObjects = {
 
 const TrelloProvider = ({ children }) => {
   const [trelloBoardId, setTrelloBoardId] = useState();
+  const [canDrag, setCanDrag] = useState(false);
   const [boards, setBoards] = useState([[]]);
   const [trelloObjects, setTrelloObjects] = useState({
     ...defaultTrelloObjects,
@@ -123,7 +130,7 @@ const TrelloProvider = ({ children }) => {
 
           const _boards = generateBoard(board, lists, cards, labels);
           setBoards(_boards);
-          // console.log(_boards);
+
           setTrelloObjects((prevState) => ({
             ...prevState,
             board,
@@ -132,6 +139,8 @@ const TrelloProvider = ({ children }) => {
             labels,
             isLoaded: true,
           }));
+
+          setCanDrag(true);
         } catch (e) {
           setTrelloObjects({
             ...defaultTrelloObjects,
@@ -143,17 +152,62 @@ const TrelloProvider = ({ children }) => {
     })();
   }, [trelloBoardId]);
 
+  const fetchCardsOnList = async (_idList, boardIndex) => {
+    if (canDrag) setCanDrag(false);
+    const _cards = await getCardsOnList(_idList);
+
+    setBoards((prevState) => {
+      const { idBoard } = prevState[boardIndex][BOARD_CENTER_INDEX];
+      const idList = prevState[boardIndex][BOARD_CENTER_INDEX].id;
+      return replaceArrayOnArray(
+        prevState,
+        boardIndex,
+        insertItemOnArray(
+          [
+            ..._cards.map(({ id, name, pos }) => ({
+              id,
+              name,
+              idList,
+              idBoard,
+              trelloType:
+                boardIndex === BOARD_CENTER_INDEX
+                  ? TRELLO_COLLECTION_TYPE.LISTS
+                  : TRELLO_COLLECTION_TYPE.CARDS,
+              isCenter: false,
+              pos,
+            })),
+            ...getDummyList(_cards.length, TRELLO_COLLECTION_TYPE.CARDS, {
+              idBoard,
+              idList,
+            }),
+          ],
+          BOARD_CENTER_INDEX,
+          prevState[boardIndex][BOARD_CENTER_INDEX]
+        )
+      );
+    });
+
+    setTrelloObjects((prevState) => ({
+      ...prevState,
+      _cards,
+    }));
+    setCanDrag(true);
+  };
+
   return (
     <Provider
       value={{
         state: {
+          canDrag,
           boards,
           trelloObjects,
         },
         actions: {
+          setCanDrag,
           setBoards,
           setTrelloBoardId,
           setTrelloObjects,
+          fetchCardsOnList,
         },
       }}
     >
