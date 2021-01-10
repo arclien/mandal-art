@@ -1,4 +1,4 @@
-import React, { useState, createContext, useEffect } from 'react';
+import React, { useState, createContext, useEffect, useCallback } from 'react';
 
 import { TRELLO_COLLECTION_TYPE } from 'constants/trello';
 import { errorToast } from 'utils/toast';
@@ -65,14 +65,32 @@ const generateBoard = (board, lists, cards) => {
 
     // 각 리스트(보드)에 종속된 카드 (셀) 필터
     const _cards = getCardsByListId(cards, list.id).map(
-      ({ id, name, idBoard, idList, shortUrl }, _index) => ({
+      (
+        {
+          id,
+          name,
+          idBoard,
+          idList,
+          shortUrl,
+          desc,
+          badges,
+          idChecklists,
+          labels,
+          pos,
+        },
+        _index
+      ) => ({
         id,
         name,
         idBoard,
         idList,
         url: shortUrl,
+        desc,
+        badges,
+        idChecklists,
+        labels,
         trelloType: TRELLO_COLLECTION_TYPE.CARDS,
-        pos: _index,
+        pos,
       })
     );
 
@@ -152,47 +170,66 @@ const TrelloProvider = ({ children }) => {
     })();
   }, [trelloBoardId]);
 
-  const fetchCardsOnList = async (_idList, boardIndex) => {
-    if (canDrag) setCanDrag(false);
-    const _cards = await getCardsOnList(_idList);
+  const fetchCardsOnList = useCallback(
+    async (_idList, boardIndex) => {
+      if (canDrag) setCanDrag(false);
+      const _cards = await getCardsOnList(_idList);
 
-    setBoards((prevState) => {
-      const { idBoard } = prevState[boardIndex][BOARD_CENTER_INDEX];
-      const idList = prevState[boardIndex][BOARD_CENTER_INDEX].id;
-      return replaceArrayOnArray(
-        prevState,
-        boardIndex,
-        insertItemOnArray(
-          [
-            ..._cards.map(({ id, name, pos }) => ({
-              id,
-              name,
-              idList,
-              idBoard,
-              trelloType:
-                boardIndex === BOARD_CENTER_INDEX
-                  ? TRELLO_COLLECTION_TYPE.LISTS
-                  : TRELLO_COLLECTION_TYPE.CARDS,
-              isCenter: false,
-              pos,
-            })),
-            ...getDummyList(_cards.length, TRELLO_COLLECTION_TYPE.CARDS, {
-              idBoard,
-              idList,
-            }),
-          ],
-          BOARD_CENTER_INDEX,
-          prevState[boardIndex][BOARD_CENTER_INDEX]
-        )
-      );
-    });
+      setBoards((prevState) => {
+        const { idBoard } = prevState[boardIndex][BOARD_CENTER_INDEX];
+        const idList = prevState[boardIndex][BOARD_CENTER_INDEX].id;
+        return replaceArrayOnArray(
+          prevState,
+          boardIndex,
+          insertItemOnArray(
+            [
+              ..._cards.map(
+                ({
+                  id,
+                  name,
+                  pos,
+                  shortUrl,
+                  desc,
+                  badges,
+                  idChecklists,
+                  labels,
+                }) => ({
+                  id,
+                  name,
+                  idList,
+                  idBoard,
+                  url: shortUrl,
+                  desc,
+                  badges,
+                  idChecklists,
+                  labels,
+                  trelloType:
+                    boardIndex === BOARD_CENTER_INDEX
+                      ? TRELLO_COLLECTION_TYPE.LISTS
+                      : TRELLO_COLLECTION_TYPE.CARDS,
+                  isCenter: false,
+                  pos,
+                })
+              ),
+              ...getDummyList(_cards.length, TRELLO_COLLECTION_TYPE.CARDS, {
+                idBoard,
+                idList,
+              }),
+            ],
+            BOARD_CENTER_INDEX,
+            prevState[boardIndex][BOARD_CENTER_INDEX]
+          )
+        );
+      });
 
-    setTrelloObjects((prevState) => ({
-      ...prevState,
-      _cards,
-    }));
-    setCanDrag(true);
-  };
+      setTrelloObjects((prevState) => ({
+        ...prevState,
+        _cards,
+      }));
+      setCanDrag(true);
+    },
+    [canDrag]
+  );
 
   return (
     <Provider
