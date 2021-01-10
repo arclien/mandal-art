@@ -4,6 +4,7 @@ import { ConfirmModalContext } from 'context/ConfirmModalContext';
 import { TrelloContext } from 'context/TrelloContext';
 import { BOARD_CENTER_INDEX } from 'constants/board';
 import { errorToast } from 'utils/toast';
+import { browserOpen } from 'utils/utils';
 import {
   updateList,
   createList,
@@ -154,15 +155,22 @@ const BoardCell = ({ cell, setBoards, boardIndex, cellIndex }) => {
         </Hover>
       )}
 
-      {!cell?.isCenter && cell?.name && (
-        <HoverContainer.Close
-          onClick={() => {
-            openDeleteConfirmModal(
-              deleteOkCallback,
-              `"${cell?.name}"을 삭제 하시겠습니까?`
-            );
-          }}
-        />
+      {cellIndex !== BOARD_CENTER_INDEX && cell.name && (
+        <>
+          <HoverContainer.Close
+            onClick={() => {
+              openDeleteConfirmModal(
+                deleteOkCallback,
+                `"${cell.name}"을 삭제 하시겠습니까?`
+              );
+            }}
+          />
+          <HoverContainer.Link
+            onClick={() => {
+              browserOpen(cell.url);
+            }}
+          />
+        </>
       )}
     </Container>
   );

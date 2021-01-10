@@ -16,6 +16,14 @@ export const getMyBoards = () => {
   return getTrello('members/me/boards');
 };
 
+export const getOrganizaionById = (orgId) => {
+  return getTrello(`organizations/${orgId}`);
+};
+
+export const getBoardsOnOrganization = (orgId) => {
+  return getTrello(`organizations/${orgId}/boards`);
+};
+
 /** 
 ################ Get from board
 * */

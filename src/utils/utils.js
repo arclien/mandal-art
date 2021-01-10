@@ -35,3 +35,21 @@ export const replaceObejctOnArray = (arr, item) => {
 };
 
 export const getUUID = () => uuidv4();
+
+export const isBrowserIE = () => {
+  const ua = window.navigator.userAgent;
+  const trident = ua.indexOf('Trident/');
+  if (trident > 0) {
+    const rv = ua.indexOf('rv:');
+    return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
+  }
+  return false;
+};
+
+export const browserOpen = (
+  address,
+  target = '_blank',
+  features = !isBrowserIE() ? 'noopener=yes,noreferrer=yes' : ''
+) => {
+  window.open(address, target, features);
+};
