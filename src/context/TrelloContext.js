@@ -65,21 +65,18 @@ const generateBoard = (board, lists, cards) => {
 
     // 각 리스트(보드)에 종속된 카드 (셀) 필터
     const _cards = getCardsByListId(cards, list.id).map(
-      (
-        {
-          id,
-          name,
-          idBoard,
-          idList,
-          shortUrl,
-          desc,
-          badges,
-          idChecklists,
-          labels,
-          pos,
-        },
-        _index
-      ) => ({
+      ({
+        id,
+        name,
+        idBoard,
+        idList,
+        shortUrl,
+        desc,
+        badges,
+        idChecklists,
+        labels,
+        pos,
+      }) => ({
         id,
         name,
         idBoard,

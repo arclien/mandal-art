@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import { flexContainer, blue30, green50, red50, font, text } from 'remember-ui';
+import { Link } from 'react-router-dom';
 
-import plusIcon from 'assets/images/ico-plus.png';
+import detailIcon from 'assets/images/ico-detail.svg';
 import closeIcon from 'assets/images/ico-close.png';
 import linkIcon from 'assets/images/ico-external-link.svg';
 
@@ -66,13 +67,33 @@ export const HoverContainer = styled.div`
   cursor: pointer;
 `;
 
-HoverContainer.Plus = styled.img.attrs({
-  width: 20,
-  height: 20,
-  alt: 'zoom',
-  src: plusIcon,
+HoverContainer.Detail = styled.img.attrs({
+  width: 30,
+  height: 30,
+  alt: 'detail',
+  src: detailIcon,
 })`
   cursor: pointer;
+`;
+
+HoverContainer.DetailLink = styled(Link)``;
+
+HoverContainer.Detail.Top = styled(HoverContainer.Detail)`
+  ${Container}:hover & {
+    display: block;
+  }
+  display: none;
+
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: -10px;
+  right: 15px;
+  padding: 5px;
+`;
+
+HoverContainer.Detail.TopRight = styled(HoverContainer.Detail.Top)`
+  right: -10px;
 `;
 
 HoverContainer.Close = styled.img.attrs({
