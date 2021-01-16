@@ -110,9 +110,10 @@ export const createCard = async (name, idList, pos) => {
 export const updateCard = async (cell) => {
   if (!cell) return;
 
-  const { id, name, pos } = cell;
+  const { id, name, pos, desc } = cell;
   const card = {
     name,
+    desc,
     pos,
   };
   return putTrello(`${TRELLO_COLLECTION_TYPE.CARDS}/${id}`, card);

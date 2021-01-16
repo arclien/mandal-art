@@ -2,29 +2,20 @@ import React, { useState, useEffect } from 'react';
 
 import { getFormattedDate } from 'utils/day';
 import { CalendarFormat } from 'constants/calendar';
-import { renderHtmlWithNewLine, browserOpen } from 'utils/utils';
+import { browserOpen } from 'utils/utils';
 import { getActionsOnCard, getBatchApi } from 'services/trello';
 import { TRELLO_COLLECTION_TYPE } from 'constants/trello';
 import { BOARD_CENTER_INDEX } from 'constants/board';
 import BoardCellLabel from 'components/Board/BoardCellLabel/BoardCellLabel';
 import BoardCellBadge from 'components/Board/BoardCellBadge/BoardCellBadge';
 import BoardCellTitle from 'components/Board/BoardCellTitle/BoardCellTitle';
+import BoardCellDesc from 'components/Board/BoardCellDesc/BoardCellDesc';
 
 import { Container, Info, Divider, Row, CheckList } from './Card.styles';
 
 const Card = ({ card, list, boardIndex, cellIndex }) => {
   // console.log(card);
-  const {
-    id,
-    name,
-    badges,
-    desc,
-    idBoard,
-    idList,
-    idChecklists,
-    labels,
-    shortUrl,
-  } = card;
+  const { id, badges, idBoard, idList, idChecklists, labels, shortUrl } = card;
   const { name: nameList } = list;
   const [checkList, setCheckList] = useState([]);
   const [commentList, setCommentList] = useState([]);
@@ -101,7 +92,10 @@ const Card = ({ card, list, boardIndex, cellIndex }) => {
 
       <Row>
         <Row.Title>Description</Row.Title>
-        {renderHtmlWithNewLine(desc)}
+        <BoardCellDesc
+          cell={{ ...card, trelloType: TRELLO_COLLECTION_TYPE.CARDS }}
+          boardIndex={boardIndex}
+        />
       </Row>
 
       <Divider />
