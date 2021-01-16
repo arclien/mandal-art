@@ -1,3 +1,4 @@
+import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 export const getRoundTwoPrecision = (number) => Math.round(number * 100) / 100;
@@ -53,3 +54,13 @@ export const browserOpen = (
 ) => {
   window.open(address, target, features);
 };
+
+export const renderHtmlWithNewLine = (string) =>
+  string.split('\n').map((line) => {
+    return (
+      <span key={line}>
+        {line}
+        <br />
+      </span>
+    );
+  });

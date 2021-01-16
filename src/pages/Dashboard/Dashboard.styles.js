@@ -26,8 +26,6 @@ export const BoardWrapper = styled.div`
 `;
 
 export const RightSideBar = styled.div`
-  ${flexContainer('flex-start', 'center', 'column')};
-
   box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 5px;
   border-radius: 0.5rem;
   padding: 20px;

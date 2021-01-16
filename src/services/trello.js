@@ -23,6 +23,8 @@ export const getBoardsOnOrganization = (orgId) => {
   return getTrello(`organizations/${orgId}/boards`);
 };
 
+export const getBatchApi = (apiList) => getTrello(`/batch`, { urls: apiList });
+
 /** 
 ################ Get from board
 * */
@@ -59,6 +61,13 @@ export const getCardsOnList = (listId) => {
 };
 
 /** 
+################ Get from Card
+* */
+
+export const getActionsOnCard = (cardId) => {
+  return getTrello(`cards/${cardId}/actions`);
+};
+/** 
 ################ Get collections by id
 * */
 export const getCardById = (cardId) => {
@@ -67,6 +76,10 @@ export const getCardById = (cardId) => {
 
 export const getListById = (listId) => {
   return getColletionTrello(TRELLO_COLLECTION_TYPE.LISTS, listId);
+};
+
+export const getCheckListById = (checkListId) => {
+  return getColletionTrello(TRELLO_COLLECTION_TYPE.CHECKLISTS, checkListId);
 };
 
 export const createLabel = async (label) => {

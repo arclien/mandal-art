@@ -4,6 +4,7 @@ import { Spinner } from 'remember-ui';
 import qs from 'qs';
 import { useLocation } from 'react-router';
 
+import DetailContainer from './DetailContainer/DetailContainer';
 import LabelContainer from './LabelContainer/LabelContainer';
 import { TrelloContext, TrelloConsumer } from 'context/TrelloContext';
 import Board from 'components/Board/Board';
@@ -24,7 +25,6 @@ const Dashboard = () => {
   const history = useHistory();
 
   const { search } = useLocation();
-
   const { cardId, listId } = qs.parse(search, {
     ignoreQueryPrefix: true,
   });
@@ -71,9 +71,7 @@ const Dashboard = () => {
                   </BoardWrapper>
                   {(cardId || listId) && (
                     <RightSideBar>
-                      {cardId || listId}
-                      <div>asda1</div>
-                      <div>asda2</div>
+                      <DetailContainer cardId={cardId} listId={listId} />
                     </RightSideBar>
                   )}
                 </Layout>

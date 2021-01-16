@@ -118,7 +118,11 @@ const BoardCell = ({ cell, boardIndex, cellIndex }) => {
       />
 
       {text && badges && (
-        <BoardCellBadge badges={badges} idChecklists={idChecklists} />
+        <BoardCellBadge
+          badges={badges}
+          idChecklists={idChecklists}
+          isCardView={false}
+        />
       )}
 
       {text && (

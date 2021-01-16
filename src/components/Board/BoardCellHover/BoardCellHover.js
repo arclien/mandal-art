@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useContext } from 'react';
+import React, { useCallback, useContext } from 'react';
 
 import { deleteCardById, archiveListById } from 'services/trello';
 import { TRELLO_COLLECTION_TYPE } from 'constants/trello';
@@ -48,7 +48,7 @@ const BoardCellHover = ({ boardIndex, cell, cellIndex }) => {
     });
   }, [boardIndex, boards, cell, setBoards]);
 
-  const { id, name, idBoard, idList, url, isCenter, trelloType } = cell;
+  const { id, name, idBoard, url, isCenter, trelloType } = cell;
 
   return (
     <>
