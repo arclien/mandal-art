@@ -25,7 +25,7 @@ const Dashboard = () => {
   const history = useHistory();
 
   const { search } = useLocation();
-  const { cardId, listId } = qs.parse(search, {
+  const { cardId, listId, boardIndex, cellIndex } = qs.parse(search, {
     ignoreQueryPrefix: true,
   });
 
@@ -71,7 +71,12 @@ const Dashboard = () => {
                   </BoardWrapper>
                   {(cardId || listId) && (
                     <RightSideBar>
-                      <DetailContainer cardId={cardId} listId={listId} />
+                      <DetailContainer
+                        cardId={cardId}
+                        listId={listId}
+                        boardIndex={boardIndex}
+                        cellIndex={cellIndex}
+                      />
                     </RightSideBar>
                   )}
                 </Layout>

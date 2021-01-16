@@ -55,7 +55,9 @@ const BoardCellHover = ({ boardIndex, cell, cellIndex }) => {
       {isCenter && boardIndex !== BOARD_CENTER_INDEX && (
         <Hover>
           <HoverContainer>
-            <HoverContainer.DetailLink to={`/board/${idBoard}?listId=${id}`}>
+            <HoverContainer.DetailLink
+              to={`/board/${idBoard}?listId=${id}&boardIndex=${boardIndex}&cellIndex=${cellIndex}`}
+            >
               <HoverContainer.Detail />
             </HoverContainer.DetailLink>
           </HoverContainer>
@@ -66,7 +68,9 @@ const BoardCellHover = ({ boardIndex, cell, cellIndex }) => {
         <>
           {trelloType === TRELLO_COLLECTION_TYPE.CARDS && (
             <>
-              <HoverContainer.DetailLink to={`/board/${idBoard}?cardId=${id}`}>
+              <HoverContainer.DetailLink
+                to={`/board/${idBoard}?cardId=${id}&boardIndex=${boardIndex}&cellIndex=${cellIndex}`}
+              >
                 <HoverContainer.Detail.Top />
               </HoverContainer.DetailLink>
               <HoverContainer.Close
@@ -80,7 +84,9 @@ const BoardCellHover = ({ boardIndex, cell, cellIndex }) => {
             </>
           )}
           {trelloType === TRELLO_COLLECTION_TYPE.LISTS && (
-            <HoverContainer.DetailLink to={`/board/${idBoard}?listId=${id}`}>
+            <HoverContainer.DetailLink
+              to={`/board/${idBoard}?listId=${id}&boardIndex=${boardIndex}&cellIndex=${cellIndex}`}
+            >
               <HoverContainer.Detail.TopRight />
             </HoverContainer.DetailLink>
           )}

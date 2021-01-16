@@ -1,16 +1,15 @@
 import React, { useEffect, useState, useContext } from 'react';
 
+import { BOARD_CENTER_INDEX } from 'constants/board';
 import { TrelloContext } from 'context/TrelloContext';
 import Card from './Card/Card';
 import List from './List/List';
 
 import { Container, Filler } from './DetailContainer.styles';
 
-const DetailContainer = ({ cardId, listId }) => {
+const DetailContainer = ({ cardId, listId, boardIndex, cellIndex }) => {
   const {
-    state: {
-      trelloObjects: { lists, cards },
-    },
+    state: { boards },
   } = useContext(TrelloContext);
 
   const [card, setCard] = useState(null);
@@ -18,19 +17,27 @@ const DetailContainer = ({ cardId, listId }) => {
 
   useEffect(() => {
     if (cardId) {
-      const _card = cards.find((el) => el.id === cardId);
-      setCard(_card);
-      setList(lists.find((el) => el.id === _card?.idList));
+      setCard(boards[boardIndex][cellIndex]);
+      setList(boards[boardIndex][BOARD_CENTER_INDEX]);
     } else if (listId) {
-      setList(lists.find((el) => el.id === listId));
+      setList(boards[boardIndex][cellIndex]);
       setCard(null);
     }
-  }, [cardId, cards, listId, lists]);
+  }, [boardIndex, boards, cardId, cellIndex, listId]);
 
   return (
     <Container>
-      {card && list && <Card card={card} list={list} />}
-      {!card && list && <List list={list} />}
+      {card && list && (
+        <Card
+          card={card}
+          list={list}
+          boardIndex={boardIndex}
+          cellIndex={cellIndex}
+        />
+      )}
+      {!card && list && (
+        <List list={list} boardIndex={boardIndex} cellIndex={cellIndex} />
+      )}
 
       <Filler />
     </Container>

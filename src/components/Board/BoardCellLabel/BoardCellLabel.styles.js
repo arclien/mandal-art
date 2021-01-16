@@ -1,5 +1,11 @@
 import styled, { css } from 'styled-components';
-import { flexContainer, white, font, BaseInput } from 'remember-ui';
+import {
+  flexContainer,
+  white,
+  font,
+  BaseInput,
+  textEllipsis,
+} from 'remember-ui';
 
 import plusIcon from 'assets/images/ico-plus.png';
 import closeIcon from 'assets/images/ico-close.png';
@@ -49,6 +55,7 @@ export const LabelInput = styled(BaseInput)`
   cursor: pointer;
 
   > input {
+    ${textEllipsis};
     ${font({ size: '12px', color: white })};
 
     max-width: 90px;

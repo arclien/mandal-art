@@ -4,12 +4,15 @@ import { getFormattedDate } from 'utils/day';
 import { CalendarFormat } from 'constants/calendar';
 import { renderHtmlWithNewLine, browserOpen } from 'utils/utils';
 import { getActionsOnCard, getBatchApi } from 'services/trello';
+import { TRELLO_COLLECTION_TYPE } from 'constants/trello';
+import { BOARD_CENTER_INDEX } from 'constants/board';
 import BoardCellLabel from 'components/Board/BoardCellLabel/BoardCellLabel';
 import BoardCellBadge from 'components/Board/BoardCellBadge/BoardCellBadge';
+import BoardCellTitle from 'components/Board/BoardCellTitle/BoardCellTitle';
 
 import { Container, Info, Divider, Row, CheckList } from './Card.styles';
 
-const Card = ({ card, list }) => {
+const Card = ({ card, list, boardIndex, cellIndex }) => {
   // console.log(card);
   const {
     id,
@@ -29,10 +32,13 @@ const Card = ({ card, list }) => {
   useEffect(() => {
     (async () => {
       const _list = idChecklists.map((_id) => `/checklists/${_id}`).join(',');
-      const checklist = await getBatchApi(_list);
+      if (_list) {
+        const checklist = await getBatchApi(_list);
+        setCheckList(checklist.map((res) => res['200']));
+      }
+
       const comments = await getActionsOnCard(id);
       setCommentList(comments);
-      setCheckList(checklist.map((res) => res['200']));
     })();
   }, [id, idChecklists, setCheckList]);
 
@@ -41,7 +47,13 @@ const Card = ({ card, list }) => {
     <Container>
       <Info>
         <Info.Title>
-          {name}
+          <BoardCellTitle
+            cell={{ ...card, trelloType: TRELLO_COLLECTION_TYPE.CARDS }}
+            boardIndex={boardIndex}
+            cellIndex={cellIndex}
+            showFull
+          />
+
           <Info.TrelloLink
             onClick={() => {
               browserOpen(shortUrl);
@@ -51,7 +63,9 @@ const Card = ({ card, list }) => {
         <Info.Attr>
           <Info.Attr.Type>
             in list &nbsp;
-            <Info.Attr.Link to={`/board/${idBoard}?listId=${idList}`}>
+            <Info.Attr.Link
+              to={`/board/${idBoard}?listId=${idList}&boardIndex=${BOARD_CENTER_INDEX}&cellIndex=${boardIndex}`}
+            >
               {nameList}
             </Info.Attr.Link>
           </Info.Attr.Type>
