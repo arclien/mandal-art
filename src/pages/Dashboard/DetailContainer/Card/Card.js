@@ -3,13 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { getFormattedDate } from 'utils/day';
 import { CalendarFormat } from 'constants/calendar';
 import { browserOpen } from 'utils/utils';
-import { getActionsOnCard, getBatchApi } from 'services/trello';
+import { getActionsOnCard } from 'services/trello';
 import { TRELLO_COLLECTION_TYPE } from 'constants/trello';
 import { BOARD_CENTER_INDEX } from 'constants/board';
 import BoardCellLabel from 'components/Board/BoardCellLabel/BoardCellLabel';
 import BoardCellBadge from 'components/Board/BoardCellBadge/BoardCellBadge';
 import BoardCellTitle from 'components/Board/BoardCellTitle/BoardCellTitle';
 import BoardCellDesc from 'components/Board/BoardCellDesc/BoardCellDesc';
+import BoardCellCheckList from 'components/Board/BoardCellCheckList/BoardCellCheckList';
 
 import { Container, Info, Divider, Row, CheckList } from './Card.styles';
 
@@ -17,21 +18,14 @@ const Card = ({ card, list, boardIndex, cellIndex }) => {
   // console.log(card);
   const { id, badges, idBoard, idList, idChecklists, labels, shortUrl } = card;
   const { name: nameList } = list;
-  const [checkList, setCheckList] = useState([]);
   const [commentList, setCommentList] = useState([]);
 
   useEffect(() => {
     (async () => {
-      const _list = idChecklists.map((_id) => `/checklists/${_id}`).join(',');
-      if (_list) {
-        const checklist = await getBatchApi(_list);
-        setCheckList(checklist.map((res) => res['200']));
-      }
-
       const comments = await getActionsOnCard(id);
       setCommentList(comments);
     })();
-  }, [id, idChecklists, setCheckList]);
+  }, [id]);
 
   // console.log(commentList);
   return (
@@ -100,31 +94,11 @@ const Card = ({ card, list, boardIndex, cellIndex }) => {
 
       <Divider />
 
-      {checkList.length > 0 && (
+      {idChecklists.length > 0 && (
         <>
           <Row>
             <Row.Title>CheckLists</Row.Title>
-            {checkList.map((check) => {
-              return (
-                <CheckList key={check.id}>
-                  <CheckList.Title>{check.name}</CheckList.Title>
-                  {check.checkItems.map((item) => {
-                    return (
-                      <CheckList.Items key={item.id}>
-                        <CheckList.Item>
-                          <CheckList.Item.Title>
-                            {item.name}
-                          </CheckList.Item.Title>
-                          <CheckList.Item.Status>
-                            {item.state}
-                          </CheckList.Item.Status>
-                        </CheckList.Item>
-                      </CheckList.Items>
-                    );
-                  })}
-                </CheckList>
-              );
-            })}
+            <BoardCellCheckList idChecklists={idChecklists} />
           </Row>
 
           <Divider />
