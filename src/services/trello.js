@@ -62,11 +62,12 @@ export const getCardsOnList = (listId) => {
 
 /** 
 ################ Get from Card
+default response commentCard
 * */
-
 export const getActionsOnCard = (cardId) => {
   return getTrello(`cards/${cardId}/actions`);
 };
+
 /** 
 ################ Get collections by id
 * */
@@ -78,8 +79,55 @@ export const getListById = (listId) => {
   return getColletionTrello(TRELLO_COLLECTION_TYPE.LISTS, listId);
 };
 
+// checklist 만들기 on card
+export const createCheckListById = (cardId, name) => {
+  const newCheckList = {
+    name,
+    pos: 'bottom',
+  };
+  return postTrello(`cards/${cardId}/checklists`, newCheckList);
+};
+
+// checklist 가져오기
 export const getCheckListById = (checkListId) => {
   return getColletionTrello(TRELLO_COLLECTION_TYPE.CHECKLISTS, checkListId);
+};
+
+// checklist 이름 변경
+export const updateCheckListById = async (checkListId, name) => {
+  const newCheckList = { name };
+  const res = await putTrello(`checklists/${checkListId}`, newCheckList);
+  return res;
+};
+
+// checklist 삭제
+export const deleteCheckListById = async (checkListId) => {
+  return deleteTrello(`checklists/${checkListId}`);
+};
+
+// checklist 만들기 on checklist
+export const createCheckItemById = (checkListId, name) => {
+  const newCheckItem = {
+    name,
+    pos: 'bottom',
+    checked: false,
+  };
+  return postTrello(`checklists/${checkListId}/checkItems`, newCheckItem);
+};
+
+// checkitem 이름 변경 on card
+export const updateCheckItemById = async (cardId, checkItemId, name, state) => {
+  const newCheckList = { name, state };
+  const res = await putTrello(
+    `cards/${cardId}/checkItem/${checkItemId}`,
+    newCheckList
+  );
+  return res;
+};
+
+// checkitem 삭제 on card
+export const deleteCheckItemById = async (cardId, checkItemId) => {
+  return deleteTrello(`cards/${cardId}/checkItem/${checkItemId}`);
 };
 
 export const createLabel = async (label) => {
@@ -97,7 +145,6 @@ export const deleteLabel = async (idLabel) => {
   return deleteTrello(`labels/${idLabel}`);
 };
 
-// eslint-disable-next-line no-unused-vars
 export const createCard = async (name, idList, pos) => {
   const newCard = {
     idList,
