@@ -16,7 +16,7 @@ export const Container = styled.div`
     (!isMainBoard && !isCenter && blue30)};
 
   width: 100%;
-  height: calc((100vh - 168px) / 9);
+  height: calc((100vh - 190px) / 9);
   position: relative;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 7px;
   word-break: keep-all;

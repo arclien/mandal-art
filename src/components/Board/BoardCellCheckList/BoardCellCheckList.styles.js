@@ -3,10 +3,14 @@ import {
   flexContainer,
   font,
   text,
+  white,
   gray100,
   BaseInput,
   Checkbox,
+  NewBaseButton,
 } from 'remember-ui';
+
+import closeIcon from 'assets/images/ico-close.png';
 
 export const CheckList = styled.div`
   ${flexContainer('flex-start', 'flex-start', 'column')};
@@ -62,3 +66,19 @@ CheckList.Item.Title = styled(BaseInput)`
 `;
 
 CheckList.Item.Status = styled(Checkbox)``;
+
+export const AddButton = styled(NewBaseButton)`
+  ${font({ size: '16px', color: white })};
+
+  margin-top: 5px;
+`;
+
+CheckList.Item.Delete = styled.img.attrs({
+  width: 10,
+  height: 10,
+  alt: 'close',
+  src: closeIcon,
+})`
+  cursor: pointer;
+  padding: 5px;
+`;

@@ -105,7 +105,7 @@ export const deleteCheckListById = async (checkListId) => {
   return deleteTrello(`checklists/${checkListId}`);
 };
 
-// checklist 만들기 on checklist
+// checkitem 만들기 on checklist
 export const createCheckItemById = (checkListId, name) => {
   const newCheckItem = {
     name,

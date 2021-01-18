@@ -17,11 +17,14 @@ export const Container = styled.div`
 
   position: relative;
   width: 100%;
+  height: 100%;
+  overflow-y: scroll;
 `;
 
 export const Divider = styled.div`
   width: 100%;
-  height: 1px;
+  height: 5px;
+  min-height: 5px;
   margin: 10px 0px;
   background-color: ${gray100};
 `;

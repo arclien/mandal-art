@@ -4,11 +4,14 @@ import {
   getBatchApi,
   updateCheckListById,
   updateCheckItemById,
+  createCheckItemById,
+  deleteCheckItemById,
 } from 'services/trello';
 import { errorToast } from 'utils/toast';
+import { getUUID } from 'utils/utils';
 import { TRELLO_COLLECTION_TYPE, CHECKITEMS } from 'constants/trello';
 
-import { CheckList } from './BoardCellCheckList.styles';
+import { CheckList, AddButton } from './BoardCellCheckList.styles';
 
 const BoardCellCheckList = ({ idChecklists }) => {
   const [checkList, setCheckList] = useState([]);
@@ -33,9 +36,24 @@ const BoardCellCheckList = ({ idChecklists }) => {
       if (type === TRELLO_COLLECTION_TYPE.CHECKLISTS) {
         updateCheckListById(target.id, target.name);
       } else if (type === TRELLO_COLLECTION_TYPE.CHECKITEMS) {
-        const { id, name, idChecklist, state } = target;
-        const { idCard } = checkList.find((el) => el.id === idChecklist);
-        updateCheckItemById(idCard, id, name, state);
+        const { id, name, idChecklist, state, isNewItem } = target;
+        if (isNewItem) {
+          const newItem = await createCheckItemById(idChecklist, name);
+          const newCheckList = checkList.map((list) =>
+            list.id !== newItem.idChecklist
+              ? list
+              : {
+                  ...list,
+                  checkItems: list.checkItems.map((item) =>
+                    item.isNewItem ? newItem : item
+                  ),
+                }
+          );
+          setCheckList(newCheckList);
+        } else {
+          const { idCard } = checkList.find((el) => el.id === idChecklist);
+          updateCheckItemById(idCard, id, name, state);
+        }
       }
     },
     [checkList]
@@ -47,24 +65,23 @@ const BoardCellCheckList = ({ idChecklists }) => {
       onEnter(target, type);
     }
   };
-
+  console.log(checkList);
   return (
     <>
-      {checkList.map((check, index) => {
+      <AddButton block theme="blue" size="large" onClick={() => {}}>
+        Add CheckList
+      </AddButton>
+      {checkList.map((check) => {
         return (
           <CheckList key={check.id}>
             <CheckList.Title
               name={check.id}
-              value={checkList[index].name}
+              value={check.name}
               onKeyDown={(e) =>
-                onEnterPress(
-                  e,
-                  checkList[index],
-                  TRELLO_COLLECTION_TYPE.CHECKLISTS
-                )
+                onEnterPress(e, check, TRELLO_COLLECTION_TYPE.CHECKLISTS)
               }
               onChange={(e) => {
-                checkList[index].name = e.target.value;
+                check.name = e.target.value;
                 setCheckList([...checkList]);
               }}
             />
@@ -98,10 +115,45 @@ const BoardCellCheckList = ({ idChecklists }) => {
                         onEnterPress(e, item, TRELLO_COLLECTION_TYPE.CHECKITEMS)
                       }
                     />
+                    <CheckList.Item.Delete
+                      onClick={() => {
+                        deleteCheckItemById(check.idCard, item.id);
+                        const newCheckList = checkList.map((list) =>
+                          list.id !== item.idChecklist
+                            ? list
+                            : {
+                                ...list,
+                                checkItems: list.checkItems.filter(
+                                  (_item) => _item.id !== item.id
+                                ),
+                              }
+                        );
+                        setCheckList(newCheckList);
+                      }}
+                    />
                   </CheckList.Item>
                 </CheckList.Items>
               );
             })}
+            <AddButton
+              block
+              theme="light"
+              size="small"
+              onClick={() => {
+                check.checkItems = [
+                  ...check.checkItems,
+                  {
+                    name: '',
+                    idChecklist: check.id,
+                    id: getUUID(),
+                    isNewItem: true,
+                  },
+                ];
+                setCheckList([...checkList]);
+              }}
+            >
+              Add CheckItem
+            </AddButton>
           </CheckList>
         );
       })}
