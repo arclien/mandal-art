@@ -98,7 +98,7 @@ const Card = ({ card, list, boardIndex, cellIndex }) => {
         <>
           <Row>
             <Row.Title>CheckLists</Row.Title>
-            <BoardCellCheckList idChecklists={idChecklists} />
+            <BoardCellCheckList idCard={id} idChecklists={idChecklists} />
           </Row>
 
           <Divider />
