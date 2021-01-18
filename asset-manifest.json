@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/mandal-art/static/css/main.eeaae044.chunk.css",
-    "main.js": "/mandal-art/static/js/main.65a80166.chunk.js",
-    "main.js.map": "/mandal-art/static/js/main.65a80166.chunk.js.map",
+    "main.js": "/mandal-art/static/js/main.abb2de4f.chunk.js",
+    "main.js.map": "/mandal-art/static/js/main.abb2de4f.chunk.js.map",
     "runtime-main.js": "/mandal-art/static/js/runtime-main.4e1db1da.js",
     "runtime-main.js.map": "/mandal-art/static/js/runtime-main.4e1db1da.js.map",
     "static/css/2.7ac682ed.chunk.css": "/mandal-art/static/css/2.7ac682ed.chunk.css",
@@ -24,6 +24,6 @@
     "static/css/2.7ac682ed.chunk.css",
     "static/js/2.b563b06f.chunk.js",
     "static/css/main.eeaae044.chunk.css",
-    "static/js/main.65a80166.chunk.js"
+    "static/js/main.abb2de4f.chunk.js"
   ]
 }
