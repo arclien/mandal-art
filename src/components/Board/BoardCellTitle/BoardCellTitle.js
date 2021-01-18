@@ -33,7 +33,6 @@ const validateBeforeSave = (cell, board, text) => {
 const BoardCellTitle = ({
   cell,
   boardIndex,
-  cellIndex,
   disabled = false,
   showFull = false,
 }) => {
