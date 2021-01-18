@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
-import { getBatchApi } from 'services/trello';
+import { getBatchApi, updateCheckListById } from 'services/trello';
+import { errorToast } from 'utils/toast';
 
 import { CheckList } from './BoardCellCheckList.styles';
 
@@ -18,12 +19,35 @@ const BoardCellCheckList = ({ idChecklists }) => {
     })();
   }, [idChecklists, setCheckList]);
 
+  const onEnter = useCallback(async (target) => {
+    if (!target.name.trim()) {
+      errorToast(`목표 내용은 빈 값이 될 수 없습니다.`);
+      return;
+    }
+    updateCheckListById(target.id, target.name);
+  }, []);
+
+  const onEnterPress = (e, target) => {
+    if (e.keyCode === 13 && e.shiftKey === false) {
+      e.preventDefault();
+      onEnter(target);
+    }
+  };
+
   return (
     <>
-      {checkList.map((check) => {
+      {checkList.map((check, index) => {
         return (
           <CheckList key={check.id}>
-            <CheckList.Title>{check.name}</CheckList.Title>
+            <CheckList.Title
+              name={check.id}
+              value={checkList[index].name}
+              onKeyDown={(e) => onEnterPress(e, checkList[index])}
+              onChange={(e) => {
+                checkList[index].name = e.target.value;
+                setCheckList([...checkList]);
+              }}
+            />
             {check.checkItems.map((item) => {
               return (
                 <CheckList.Items key={item.id}>

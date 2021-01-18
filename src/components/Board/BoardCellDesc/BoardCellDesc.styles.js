@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { font, text, gray100 } from 'remember-ui';
 
 export const TextArea = styled.textarea.attrs({

@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useRouteMatch, useHistory } from 'react-router-dom';
 import { Spinner } from 'remember-ui';
 import qs from 'qs';
@@ -16,6 +16,7 @@ import {
   BoardWrapper,
   Layout,
   RightSideBar,
+  ExpandIcon,
 } from './Dashboard.styles';
 
 const Dashboard = () => {
@@ -23,6 +24,7 @@ const Dashboard = () => {
     params: { boardId },
   } = useRouteMatch();
   const history = useHistory();
+  const [isExpanded, setExpanded] = useState(false);
 
   const { search } = useLocation();
   const { cardId, listId, boardIndex, cellIndex } = qs.parse(search, {
@@ -70,12 +72,16 @@ const Dashboard = () => {
                         ))}
                   </BoardWrapper>
                   {(cardId || listId) && (
-                    <RightSideBar>
+                    <RightSideBar isExpanded={isExpanded}>
                       <DetailContainer
                         cardId={cardId}
                         listId={listId}
                         boardIndex={boardIndex}
                         cellIndex={cellIndex}
+                      />
+                      <ExpandIcon
+                        isExpanded={isExpanded}
+                        onClick={() => setExpanded(!isExpanded)}
                       />
                     </RightSideBar>
                   )}
