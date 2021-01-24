@@ -4,6 +4,7 @@ import {
   font,
   text,
   white,
+  red100,
   gray100,
   BaseInput,
   Checkbox,
@@ -11,12 +12,31 @@ import {
 } from 'remember-ui';
 
 import closeIcon from 'assets/images/ico-close.png';
+import trashIconWhite from 'assets/images/ico-trash-white.png';
 
 export const CheckList = styled.div`
   ${flexContainer('flex-start', 'flex-start', 'column')};
 
   width: 100%;
   padding: 10px 0px;
+`;
+
+CheckList.Top = styled.div`
+  ${flexContainer('space-between', 'start', 'row')};
+
+  width: 100%;
+`;
+
+CheckList.Delete = styled.img.attrs({
+  width: 20,
+  alt: 'trash',
+  src: trashIconWhite,
+})`
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 5px;
+  margin-left: 10px;
+  background-color: ${red100};
 `;
 
 CheckList.Title = styled.textarea.attrs({
@@ -41,7 +61,7 @@ CheckList.Items = styled.div`
 `;
 
 CheckList.Item = styled.div`
-  ${flexContainer('flex-start', 'center', 'row')};
+  ${flexContainer('space-between', 'center', 'row')};
   ${font({ size: '16px', color: text })};
 
   width: 100%;
@@ -49,10 +69,12 @@ CheckList.Item = styled.div`
 `;
 
 CheckList.Item.Title = styled(BaseInput)`
+  width: calc(100% - 100px);
+
   > input {
     ${font({ size: '16px', color: text })};
 
-    width: auto;
+    width: 100%;
     background-color: transparent;
     border: 0px;
     padding: 5px;

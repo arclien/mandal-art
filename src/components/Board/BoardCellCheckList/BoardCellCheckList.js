@@ -4,8 +4,9 @@ import {
   getBatchApi,
   createCheckListById,
   updateCheckListById,
-  updateCheckItemById,
+  deleteCheckListById,
   createCheckItemById,
+  updateCheckItemById,
   deleteCheckItemById,
 } from 'services/trello';
 import { errorToast } from 'utils/toast';
@@ -14,7 +15,11 @@ import { TRELLO_COLLECTION_TYPE, CHECKITEMS } from 'constants/trello';
 
 import { CheckList, AddButton } from './BoardCellCheckList.styles';
 
-const BoardCellCheckList = ({ idCard, idChecklists }) => {
+const BoardCellCheckList = ({
+  idCard,
+  idChecklists,
+  setIdCheckListsOnCard,
+}) => {
   const [checkList, setCheckList] = useState([]);
 
   useEffect(() => {
@@ -43,6 +48,7 @@ const BoardCellCheckList = ({ idCard, idChecklists }) => {
             list.isNewList ? newList : list
           );
           setCheckList(newCheckList);
+          setIdCheckListsOnCard((prevState) => [...prevState, newList.id]);
         } else {
           updateCheckListById(target.id, target.name);
         }
@@ -68,7 +74,7 @@ const BoardCellCheckList = ({ idCard, idChecklists }) => {
         }
       }
     },
-    [checkList]
+    [checkList, setIdCheckListsOnCard]
   );
 
   const onEnterPress = (e, target, type) => {
@@ -77,7 +83,7 @@ const BoardCellCheckList = ({ idCard, idChecklists }) => {
       onEnter(target, type);
     }
   };
-  console.log(checkList);
+
   return (
     <>
       <AddButton
@@ -102,17 +108,32 @@ const BoardCellCheckList = ({ idCard, idChecklists }) => {
       {checkList.map((check) => {
         return (
           <CheckList key={check.id}>
-            <CheckList.Title
-              name={check.id}
-              value={check.name}
-              onKeyDown={(e) =>
-                onEnterPress(e, check, TRELLO_COLLECTION_TYPE.CHECKLISTS)
-              }
-              onChange={(e) => {
-                check.name = e.target.value;
-                setCheckList([...checkList]);
-              }}
-            />
+            <CheckList.Top>
+              <CheckList.Title
+                name={check.id}
+                value={check.name}
+                autoFocus={!check.name}
+                onKeyDown={(e) =>
+                  onEnterPress(e, check, TRELLO_COLLECTION_TYPE.CHECKLISTS)
+                }
+                onChange={(e) => {
+                  check.name = e.target.value;
+                  setCheckList([...checkList]);
+                }}
+              />
+              <CheckList.Delete
+                onClick={() => {
+                  deleteCheckListById(check.id);
+                  const newCheckList = checkList.filter(
+                    (list) => list.id !== check.id
+                  );
+                  setIdCheckListsOnCard(
+                    idChecklists.filter((list) => list !== check.id)
+                  );
+                  setCheckList(newCheckList);
+                }}
+              />
+            </CheckList.Top>
             {check.checkItems.map((item) => {
               return (
                 <CheckList.Items key={item.id}>

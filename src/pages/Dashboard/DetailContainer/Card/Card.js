@@ -19,6 +19,9 @@ const Card = ({ card, list, boardIndex, cellIndex }) => {
   const { id, badges, idBoard, idList, idChecklists, labels, shortUrl } = card;
   const { name: nameList } = list;
   const [commentList, setCommentList] = useState([]);
+  const [idChecklistsOnCard, setIdCheckListsOnCard] = useState([
+    ...idChecklists,
+  ]);
 
   useEffect(() => {
     (async () => {
@@ -74,11 +77,7 @@ const Card = ({ card, list, boardIndex, cellIndex }) => {
         <>
           <Row>
             <Row.Title>Date</Row.Title>
-            <BoardCellBadge
-              badges={badges}
-              idChecklists={idChecklists}
-              isCardView
-            />
+            <BoardCellBadge badges={badges} isCardView />
           </Row>
           <Divider />
         </>
@@ -94,11 +93,15 @@ const Card = ({ card, list, boardIndex, cellIndex }) => {
 
       <Divider />
 
-      {idChecklists.length > 0 && (
+      {idChecklistsOnCard.length > 0 && (
         <>
           <Row>
             <Row.Title>CheckLists</Row.Title>
-            <BoardCellCheckList idCard={id} idChecklists={idChecklists} />
+            <BoardCellCheckList
+              idCard={id}
+              idChecklists={idChecklistsOnCard}
+              setIdCheckListsOnCard={setIdCheckListsOnCard}
+            />
           </Row>
 
           <Divider />
