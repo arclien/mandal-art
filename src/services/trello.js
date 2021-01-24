@@ -23,6 +23,8 @@ export const getBoardsOnOrganization = (orgId) => {
   return getTrello(`organizations/${orgId}/boards`);
 };
 
+export const getBatchApi = (apiList) => getTrello(`/batch`, { urls: apiList });
+
 /** 
 ################ Get from board
 * */
@@ -59,6 +61,14 @@ export const getCardsOnList = (listId) => {
 };
 
 /** 
+################ Get from Card
+default response commentCard
+* */
+export const getActionsOnCard = (cardId) => {
+  return getTrello(`cards/${cardId}/actions`);
+};
+
+/** 
 ################ Get collections by id
 * */
 export const getCardById = (cardId) => {
@@ -67,6 +77,57 @@ export const getCardById = (cardId) => {
 
 export const getListById = (listId) => {
   return getColletionTrello(TRELLO_COLLECTION_TYPE.LISTS, listId);
+};
+
+// checklist 만들기 on card
+export const createCheckListById = (cardId, name) => {
+  const newCheckList = {
+    name,
+    pos: 'bottom',
+  };
+  return postTrello(`cards/${cardId}/checklists`, newCheckList);
+};
+
+// checklist 가져오기
+export const getCheckListById = (checkListId) => {
+  return getColletionTrello(TRELLO_COLLECTION_TYPE.CHECKLISTS, checkListId);
+};
+
+// checklist 이름 변경
+export const updateCheckListById = async (checkListId, name) => {
+  const newCheckList = { name };
+  const res = await putTrello(`checklists/${checkListId}`, newCheckList);
+  return res;
+};
+
+// checklist 삭제
+export const deleteCheckListById = async (checkListId) => {
+  return deleteTrello(`checklists/${checkListId}`);
+};
+
+// checkitem 만들기 on checklist
+export const createCheckItemById = (checkListId, name) => {
+  const newCheckItem = {
+    name,
+    pos: 'bottom',
+    checked: false,
+  };
+  return postTrello(`checklists/${checkListId}/checkItems`, newCheckItem);
+};
+
+// checkitem 이름 변경 on card
+export const updateCheckItemById = async (cardId, checkItemId, name, state) => {
+  const newCheckList = { name, state };
+  const res = await putTrello(
+    `cards/${cardId}/checkItem/${checkItemId}`,
+    newCheckList
+  );
+  return res;
+};
+
+// checkitem 삭제 on card
+export const deleteCheckItemById = async (cardId, checkItemId) => {
+  return deleteTrello(`cards/${cardId}/checkItem/${checkItemId}`);
 };
 
 export const createLabel = async (label) => {
@@ -84,7 +145,6 @@ export const deleteLabel = async (idLabel) => {
   return deleteTrello(`labels/${idLabel}`);
 };
 
-// eslint-disable-next-line no-unused-vars
 export const createCard = async (name, idList, pos) => {
   const newCard = {
     idList,
@@ -97,9 +157,10 @@ export const createCard = async (name, idList, pos) => {
 export const updateCard = async (cell) => {
   if (!cell) return;
 
-  const { id, name, pos } = cell;
+  const { id, name, pos, desc } = cell;
   const card = {
     name,
+    desc,
     pos,
   };
   return putTrello(`${TRELLO_COLLECTION_TYPE.CARDS}/${id}`, card);

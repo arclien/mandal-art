@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 
 import { TrelloContext } from 'context/TrelloContext';
 import BoardCellLabel from 'components/Board/BoardCellLabel/BoardCellLabel';

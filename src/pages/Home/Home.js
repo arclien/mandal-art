@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 
-import { getOrganizaionById, getBoardsOnOrganization } from 'services/trello';
+import { getBoardsOnOrganization } from 'services/trello';
 import { TRELLO_MANDAL_ART_ID } from 'constants/trello';
 import { TrelloMyInfoContext } from 'context/TrelloMyInfoContext';
 

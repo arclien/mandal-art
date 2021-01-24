@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 
 import { getRandomInt } from 'utils/utils';
 import { createLabel, updateLabel, deleteLabel } from 'services/trello';
@@ -12,8 +12,12 @@ import {
   LabelDelete,
 } from './BoardCellLabel.styles';
 
-const BoardCellLabel = ({ idBoard, labels, showFull }) => {
+const BoardCellLabel = ({ idBoard, labels, showFull, isCardView = false }) => {
   const [labelList, setLabelList] = useState(labels);
+
+  useEffect(() => {
+    setLabelList(labels);
+  }, [labels]);
 
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
@@ -59,6 +63,8 @@ const BoardCellLabel = ({ idBoard, labels, showFull }) => {
                 name={id}
                 maxLength={20}
                 value={name}
+                readOnly={isCardView}
+                disabled={isCardView}
                 onChange={handleChange}
                 onKeyDown={(e) => {
                   onEnterPress(e, id);

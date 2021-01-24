@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { flexContainer, white, green70, red100, font, text } from 'remember-ui';
 
 import commentIcon from 'assets/images/ico-comment.svg';
@@ -7,9 +7,16 @@ import checkIcon from 'assets/images/ico-checklist.svg';
 
 export const Container = styled.div`
   ${flexContainer('space-between', 'center', 'row')};
-
-  width: 100%;
   padding: 0px 5px 5px;
+  width: 100%;
+
+  ${({ isCardView }) =>
+    isCardView &&
+    css`
+      ${flexContainer('flex-start', 'flex-start', 'column')};
+
+      padding: 0px 5px 0px;
+    `};
 `;
 
 const Badge = styled.div`
@@ -22,6 +29,17 @@ const Badge = styled.div`
 
   padding: 2px 4px;
   border-radius: 5px;
+`;
+
+export const Date = styled.div`
+  ${flexContainer('space-between', 'center', 'row')};
+  ${({ isCardView }) =>
+    isCardView &&
+    css`
+      ${flexContainer('flex-start', 'flex-start', 'column')};
+    `}
+
+  width:100%;
 `;
 
 export const Due = styled(Badge)``;

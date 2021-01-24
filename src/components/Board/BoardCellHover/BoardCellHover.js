@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useContext } from 'react';
+import React, { useCallback, useContext } from 'react';
 
 import { deleteCardById, archiveListById } from 'services/trello';
 import { TRELLO_COLLECTION_TYPE } from 'constants/trello';
@@ -48,39 +48,49 @@ const BoardCellHover = ({ boardIndex, cell, cellIndex }) => {
     });
   }, [boardIndex, boards, cell, setBoards]);
 
-  const {
-    id,
-    name,
-    idBoard,
-    idList,
-    url,
-    desc,
-    badges,
-    idChecklists,
-    labels,
-    isCenter,
-  } = cell;
+  const { id, name, idBoard, url, isCenter, trelloType } = cell;
 
   return (
     <>
-      {isCenter && (
+      {isCenter && boardIndex !== BOARD_CENTER_INDEX && (
         <Hover>
           <HoverContainer>
-            <HoverContainer.Plus />
+            <HoverContainer.DetailLink
+              to={`/board/${idBoard}?listId=${id}&boardIndex=${boardIndex}&cellIndex=${cellIndex}`}
+            >
+              <HoverContainer.Detail />
+            </HoverContainer.DetailLink>
           </HoverContainer>
         </Hover>
       )}
 
       {cellIndex !== BOARD_CENTER_INDEX && name && (
         <>
-          <HoverContainer.Close
-            onClick={() => {
-              openDeleteConfirmModal(
-                deleteOkCallback,
-                `"${name}"을 삭제 하시겠습니까?`
-              );
-            }}
-          />
+          {trelloType === TRELLO_COLLECTION_TYPE.CARDS && (
+            <>
+              <HoverContainer.DetailLink
+                to={`/board/${idBoard}?cardId=${id}&boardIndex=${boardIndex}&cellIndex=${cellIndex}`}
+              >
+                <HoverContainer.Detail.Top />
+              </HoverContainer.DetailLink>
+              <HoverContainer.Close
+                onClick={() => {
+                  openDeleteConfirmModal(
+                    deleteOkCallback,
+                    `"${name}"을 삭제 하시겠습니까?`
+                  );
+                }}
+              />
+            </>
+          )}
+          {trelloType === TRELLO_COLLECTION_TYPE.LISTS && (
+            <HoverContainer.DetailLink
+              to={`/board/${idBoard}?listId=${id}&boardIndex=${boardIndex}&cellIndex=${cellIndex}`}
+            >
+              <HoverContainer.Detail.TopRight />
+            </HoverContainer.DetailLink>
+          )}
+
           <HoverContainer.Link
             onClick={() => {
               browserOpen(url);

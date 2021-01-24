@@ -1,5 +1,11 @@
 import styled, { css } from 'styled-components';
-import { flexContainer, white, font, BaseInput } from 'remember-ui';
+import {
+  flexContainer,
+  white,
+  font,
+  BaseInput,
+  textEllipsis,
+} from 'remember-ui';
 
 import plusIcon from 'assets/images/ico-plus.png';
 import closeIcon from 'assets/images/ico-close.png';
@@ -9,6 +15,7 @@ export const Container = styled.div`
 
   width: 100%;
   padding: 5px;
+  flex-wrap: wrap;
 `;
 
 export const Label = styled.div`
@@ -37,8 +44,8 @@ export const Label = styled.div`
     `};
 
   position: relative;
-  margin: 0px 4px 0px 0;
-  padding: 0px 15px;
+  margin: 0px 4px 5px 0;
+  padding: 0px 15px 0 10px;
   border-radius: 10px;
   cursor: pointer;
 `;
@@ -48,8 +55,10 @@ export const LabelInput = styled(BaseInput)`
   cursor: pointer;
 
   > input {
+    ${textEllipsis};
     ${font({ size: '12px', color: white })};
 
+    max-width: 90px;
     background-color: transparent;
     border: 0px;
     width: auto;

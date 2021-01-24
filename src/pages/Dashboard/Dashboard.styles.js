@@ -1,13 +1,23 @@
 import styled from 'styled-components';
-import { flexColumnCenterX } from 'remember-ui';
+import { flexColumnCenterX, flexContainer } from 'remember-ui';
+
+import rightIcon from 'assets/images/ico-arrow-right.png';
+import leftIcon from 'assets/images/ico-arrow-left.png';
 
 export const Container = styled.div`
   ${flexColumnCenterX};
 
   padding: 20px;
+  height: 100%;
 `;
 
+export const Layout = styled.div`
+  ${flexContainer('space-evenly', 'flex-start')};
+`;
 export const BoardWrapper = styled.div`
+  width: ${({ hasRightSideBar }) =>
+    hasRightSideBar ? `calc(100% - 300px)` : `100%`};
+
   display: grid;
   grid-template-rows: 1fr 1fr 1fr;
   grid-template-columns: 1fr 1fr 1fr;
@@ -15,4 +25,34 @@ export const BoardWrapper = styled.div`
   padding: 20px;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 5px;
   border-radius: 0.5rem;
+  z-index: 100;
+`;
+
+export const RightSideBar = styled.div`
+  position: relative;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 5px;
+  border-radius: 0.5rem;
+  padding: 20px;
+  margin-left: 10px;
+  width: ${({ isExpanded }) => (isExpanded ? '700px' : '300px')};
+  height: calc(100vh - 60px);
+
+  -webkit-transition: width 1s ease-in-out;
+  -moz-transition: width 1s ease-in-out;
+  -o-transition: width 1s ease-in-out;
+  transition: width 1s ease-in-out;
+`;
+
+export const ExpandIcon = styled.img.attrs(({ isExpanded }) => ({
+  width: 40,
+  height: 40,
+  alt: 'arrow',
+  src: isExpanded ? rightIcon : leftIcon,
+}))`
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  left: -30px;
+  padding: 5px;
+  z-index: 200;
 `;

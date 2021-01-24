@@ -8,6 +8,7 @@ export const {
 export const TRELLO_COLLECTION_TYPE = {
   CARDS: 'cards',
   CHECKLISTS: 'checklists',
+  CHECKITEMS: 'checkitems',
   BOARDS: 'boards',
   LISTS: 'lists',
   MEMBERS: 'members',
@@ -27,3 +28,8 @@ export const TRELLO_LABEL_COLOR = [
   'pink',
   'lime',
 ];
+
+export const CHECKITEMS = {
+  COMPLETE: 'complete',
+  INCOMPLETE: 'incomplete',
+};
