@@ -27,8 +27,9 @@ const Card = ({ card, list, boardIndex, cellIndex }) => {
     (async () => {
       const comments = await getActionsOnCard(id);
       setCommentList(comments);
+      setIdCheckListsOnCard([...idChecklists]);
     })();
-  }, [id]);
+  }, [id, idChecklists]);
 
   // console.log(commentList);
   return (
@@ -93,20 +94,16 @@ const Card = ({ card, list, boardIndex, cellIndex }) => {
 
       <Divider />
 
-      {idChecklistsOnCard.length > 0 && (
-        <>
-          <Row>
-            <Row.Title>CheckLists</Row.Title>
-            <BoardCellCheckList
-              idCard={id}
-              idChecklists={idChecklistsOnCard}
-              setIdCheckListsOnCard={setIdCheckListsOnCard}
-            />
-          </Row>
+      <Row>
+        <Row.Title>CheckLists</Row.Title>
+        <BoardCellCheckList
+          idCard={id}
+          idChecklists={idChecklistsOnCard}
+          setIdCheckListsOnCard={setIdCheckListsOnCard}
+        />
+      </Row>
 
-          <Divider />
-        </>
-      )}
+      <Divider />
 
       {commentList.length > 0 && (
         <>
