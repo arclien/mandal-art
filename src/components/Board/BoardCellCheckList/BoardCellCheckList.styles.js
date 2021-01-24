@@ -1,10 +1,11 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import {
   flexContainer,
   font,
   text,
   white,
   red100,
+  blue100,
   gray100,
   BaseInput,
   Checkbox,
@@ -37,6 +38,13 @@ CheckList.Delete = styled.img.attrs({
   border-radius: 5px;
   margin-left: 10px;
   background-color: ${red100};
+
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      opacity: 0.3;
+      cursor: not-allowed;
+    `}
 `;
 
 CheckList.Title = styled.textarea.attrs({
@@ -52,6 +60,13 @@ CheckList.Title = styled.textarea.attrs({
   border-radius: 5px;
   text-align: left;
   resize: none;
+
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      opacity: 0.3;
+      cursor: not-allowed;
+    `}
 `;
 
 CheckList.Items = styled.div`
@@ -84,6 +99,13 @@ CheckList.Item.Title = styled(BaseInput)`
       border: 1px solid ${gray100};
       border-radius: 5px;
     }
+
+    ${({ disabled }) =>
+      disabled &&
+      css`
+        opacity: 0.3;
+        cursor: not-allowed;
+      `}
   }
 `;
 
@@ -91,8 +113,19 @@ CheckList.Item.Status = styled(Checkbox)``;
 
 export const AddButton = styled(NewBaseButton)`
   ${font({ size: '16px', color: white })};
-
+  ${({ outline }) =>
+    outline &&
+    css`
+      ${font({ size: '16px', color: blue100 })};
+    `};
   margin-top: 5px;
+
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      opacity: 0.3;
+      cursor: not-allowed;
+    `}
 `;
 
 CheckList.Item.Delete = styled.img.attrs({
@@ -103,4 +136,11 @@ CheckList.Item.Delete = styled.img.attrs({
 })`
   cursor: pointer;
   padding: 5px;
+
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      opacity: 0.3;
+      cursor: not-allowed;
+    `}
 `;

@@ -21,6 +21,7 @@ const BoardCellCheckList = ({
   setIdCheckListsOnCard,
 }) => {
   const [checkList, setCheckList] = useState([]);
+  const [isDisabled, setDisabled] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -81,6 +82,7 @@ const BoardCellCheckList = ({
     if (e.keyCode === 13 && e.shiftKey === false) {
       e.preventDefault();
       onEnter(target, type);
+      setDisabled(false);
     }
   };
 
@@ -90,6 +92,7 @@ const BoardCellCheckList = ({
         block
         theme="blue"
         size="large"
+        disabled={isDisabled}
         onClick={() => {
           setCheckList([
             ...checkList,
@@ -101,6 +104,7 @@ const BoardCellCheckList = ({
               isNewList: true,
             },
           ]);
+          setDisabled(true);
         }}
       >
         Add CheckList
@@ -112,7 +116,12 @@ const BoardCellCheckList = ({
               <CheckList.Title
                 name={check.id}
                 value={check.name}
-                autoFocus={!check.name}
+                autoFocus={check.isNewList}
+                onBlur={() => {
+                  setCheckList(checkList.filter((el) => !el.isNewList));
+                  setDisabled(false);
+                }}
+                disabled={isDisabled && !check.isNewList}
                 onKeyDown={(e) =>
                   onEnterPress(e, check, TRELLO_COLLECTION_TYPE.CHECKLISTS)
                 }
@@ -122,7 +131,9 @@ const BoardCellCheckList = ({
                 }}
               />
               <CheckList.Delete
+                disabled={isDisabled}
                 onClick={() => {
+                  if (isDisabled) return;
                   deleteCheckListById(check.id);
                   const newCheckList = checkList.filter(
                     (list) => list.id !== check.id
@@ -155,6 +166,15 @@ const BoardCellCheckList = ({
                       name={item.id}
                       maxLength={40}
                       value={item.name}
+                      autoFocus={item.isNewItem}
+                      disabled={isDisabled && !item.isNewItem}
+                      onBlur={() => {
+                        check.checkItems = check.checkItems.filter(
+                          (el) => !el.isNewItem
+                        );
+                        setCheckList([...checkList]);
+                        setDisabled(false);
+                      }}
                       onChange={(e) => {
                         item.name = e.target.value;
                         check.checkItems = [...check.checkItems];
@@ -165,7 +185,9 @@ const BoardCellCheckList = ({
                       }
                     />
                     <CheckList.Item.Delete
+                      disabled={isDisabled}
                       onClick={() => {
+                        if (isDisabled) return;
                         deleteCheckItemById(check.idCard, item.id);
                         const newCheckList = checkList.map((list) =>
                           list.id !== item.idChecklist
@@ -186,7 +208,9 @@ const BoardCellCheckList = ({
             })}
             <AddButton
               block
-              theme="light"
+              outline
+              disabled={isDisabled}
+              theme="blue"
               size="small"
               onClick={() => {
                 check.checkItems = [
@@ -199,6 +223,7 @@ const BoardCellCheckList = ({
                   },
                 ];
                 setCheckList([...checkList]);
+                setDisabled(true);
               }}
             >
               Add CheckItem
